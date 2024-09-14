@@ -1,18 +1,8 @@
 import { Boundary } from "./boundary.js";
+import { ALPHA, BACKWARD, FORWARD, FOV, MOVE_STEP, YELLOW } from "./const.js";
 import { Point } from "./point.js";
 import { Ray } from "./ray.js";
-import {
-  ALPHA,
-  BACKWARD,
-  degToRad,
-  distance,
-  drawLine,
-  FORWARD,
-  FOV,
-  MOVE_STEP,
-  WHITE,
-  YELLOW,
-} from "./util.js";
+import { degToRad, distance, drawLine } from "./util.js";
 
 export class Particle {
   constructor(ctx, pos) {

@@ -1,14 +1,8 @@
 import { Particle } from "./particle.js";
 import { Point } from "./point.js";
 import { Boundary } from "./boundary.js";
-import {
-  BACKWARD,
-  calculateOpacity,
-  FORWARD,
-  invert,
-  NUM_WALLS,
-  ROTATE_DEG,
-} from "./util.js";
+import { calculateOpacity, invert } from "./util.js";
+import { BACKWARD, FORWARD, NUM_WALLS, ROTATE_DEG } from "./const.js";
 
 // 2d-canvas
 const canvas = document.getElementById("canvas-2d");
