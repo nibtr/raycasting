@@ -2,11 +2,11 @@
 
 A simple raycasting with light source and walls implemented using JS canvas APIs. This is a proof of concept for future Wolfenstein-style graphics ideas.
 
-<img width="1082" alt="image" src="https://github.com/user-attachments/assets/dad2fcac-c6c4-4cca-9d57-5c9b385a119b">
+![Screen Recording 2024-09-14 at 12 31 58 PM](https://github.com/user-attachments/assets/07ca1fde-037d-42ef-a57c-472a731d1a79)
 
 ## TODO:
 
-- Render the graphics with Wolfenstein style.
+- Render the graphics in Wolfenstein style
 
 ## References:
 
