@@ -1,6 +1,15 @@
 import { Point } from "./point.js";
 import { Ray } from "./ray.js";
-import { ALPHA, distance } from "./util.js";
+import {
+  ALPHA,
+  BACKWARD,
+  CLOCKWISE,
+  COUNTER_CLOCKWISE,
+  distance,
+  DOF,
+  FORWARD,
+  MOVE_STEP,
+} from "./util.js";
 
 export class Particle {
   constructor(ctx, pos) {
@@ -8,8 +17,10 @@ export class Particle {
     this.pos = pos;
 
     this.rays = [];
-    for (let a = 0; a <= 360; a += ALPHA / 4) {
+    let i = 0;
+    for (let a = 0; a <= DOF; a += DOF) {
       this.rays.push(new Ray(ctx, pos, a));
+      // this.rays[i] = new Ray(ctx, pos, a);
     }
   }
 
@@ -22,12 +33,41 @@ export class Particle {
     this.ctx.closePath();
   }
 
-  update(x, y) {
+  updatePos(x, y) {
     this.pos.x = x;
     this.pos.y = y;
 
     for (const ray of this.rays) {
-      ray.update(this.pos);
+      ray.updatePos(this.pos);
+    }
+  }
+
+  turn(dir) {
+    switch (dir) {
+      case CLOCKWISE:
+        for (const ray of this.rays) {
+          ray.updateAngle(ray.angle + 4);
+        }
+        break;
+      case COUNTER_CLOCKWISE:
+        for (const ray of this.rays) {
+          ray.updateAngle(ray.angle - 4);
+        }
+        break;
+      default:
+        throw new Error("Invalid turning option");
+    }
+    console.log(this.rays[0]);
+  }
+
+  move(dir) {
+    switch (dir) {
+      case FORWARD:
+        break;
+      case BACKWARD:
+        break;
+      default:
+        throw new Error("Invalid moving option");
     }
   }
 

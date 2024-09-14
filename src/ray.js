@@ -16,8 +16,13 @@ export class Ray {
     this.dir = new Point(Math.abs(this.pos.x - x), Math.abs(this.pos.y - y));
   }
 
-  update(pos) {
+  updatePos(pos) {
     this.pos = pos;
+    this.calculateDir();
+  }
+
+  updateAngle(angle) {
+    this.angle = angle;
     this.calculateDir();
   }
 }
