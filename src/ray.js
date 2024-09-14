@@ -11,13 +11,19 @@ export class Ray {
   }
 
   calculateDir() {
-    const x = Math.cos(degToRad(this.angle));
-    const y = Math.sin(degToRad(this.angle));
-    this.dir = new Point(Math.abs(this.pos.x - x), Math.abs(this.pos.y - y));
+    const dx = Math.cos(degToRad(this.angle));
+    const dy = Math.sin(degToRad(this.angle));
+    this.dir = new Point(Math.abs(this.pos.x - dx), Math.abs(this.pos.y - dy));
   }
 
-  update(pos) {
+  updatePos(pos) {
     this.pos = pos;
+    this.calculateDir();
+  }
+
+  updateAngle(angle) {
+    this.angle = angle;
+    this.angle %= 360;
     this.calculateDir();
   }
 }

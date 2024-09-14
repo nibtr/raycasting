@@ -11,14 +11,15 @@ body {
   font-size: 16px;
 }
 
-/* canvas {
-  border: 1px solid #f5f6f7;
-} */
-
 .container {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   width: 100vw;
-  height: 100vh;
+  height: 80vh;
+}
+
+#canvas-3d {
+  border: 1px solid white;
 }

@@ -1,23 +1,25 @@
 import { Particle } from "./particle.js";
 import { Point } from "./point.js";
 import { Boundary } from "./boundary.js";
-import { NUM_WALLS } from "./util.js";
+import { calculateOpacity, invert, NUM_WALLS, ROTATE_DEG } from "./util.js";
 
+// 2d-canvase
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const cursor = {
-  x: canvas.clientWidth / 3,
-  y: canvas.clientHeight / 2,
-};
+// 3d-canvas
+const canvas3d = document.getElementById("canvas-3d");
+const ctx3d = canvas3d.getContext("2d");
 
 // create new particle
-const particle = new Particle(ctx, new Point(cursor.x, cursor.y));
-particle.draw();
+const particle = new Particle(
+  ctx,
+  new Point(canvas.clientWidth / 2, canvas.clientHeight / 2)
+);
 
 const walls = [];
 
-// boundary
+// canvas boundary
 const pt1 = new Point(0, 0);
 const pt2 = new Point(canvas.clientWidth, 0);
 const pt3 = new Point(canvas.clientWidth, canvas.clientHeight);
@@ -43,29 +45,49 @@ for (let i = 0; i < NUM_WALLS; i++) {
   );
 }
 
-for (const wall of walls) {
-  wall.draw();
-}
-
-particle.cast(walls);
-
-addEventListener("mousemove", (e) => {
-  cursor.x = e.clientX - canvas.offsetLeft;
-  cursor.y = e.clientY - canvas.offsetTop;
+addEventListener("keydown", (e) => {
+  if (e.key === "a") {
+    particle.rotate(-ROTATE_DEG);
+  } else if (e.key === "d") {
+    particle.rotate(ROTATE_DEG);
+  } else if (e.key === "w") {
+    particle.move();
+  }
 });
 
 function anim() {
   requestAnimationFrame(anim);
 
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+  ctx3d.clearRect(0, 0, canvas3d.clientWidth, canvas3d.clientHeight);
 
   for (const wall of walls) {
     wall.draw();
   }
 
   particle.draw();
-  particle.cast(walls);
-  particle.update(cursor.x, cursor.y);
+  const distances = particle.cast(walls); // get the list of distances after casting
+
+  ctx3d.beginPath();
+
+  // calculate the width of a column of an intersection point
+  const columnW = canvas.clientWidth / distances.length;
+  for (let i = 0; i < distances.length; i++) {
+    const dis = distances[i];
+
+    const height = 20000 * invert(dis);
+    const opacity = calculateOpacity(dis);
+
+    ctx3d.fillStyle = `rgb(255 255 255 / ${1 - opacity})`;
+    ctx3d.strokeStyle = "transparent";
+    ctx3d.fillRect(
+      i * columnW,
+      canvas.clientHeight / 2 - height / 2,
+      columnW,
+      height
+    );
+  }
+  ctx3d.closePath();
 }
 
 anim();
