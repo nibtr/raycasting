@@ -11,10 +11,14 @@ body {
   font-size: 16px;
 }
 
-/* .container {
+.container {
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 12px;
-} */
+  width: 100vw;
+  height: 80vh;
+}
 
 #canvas-3d {
   border: 1px solid white;

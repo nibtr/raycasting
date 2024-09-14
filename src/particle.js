@@ -1,3 +1,4 @@
+import { Boundary } from "./boundary.js";
 import { Point } from "./point.js";
 import { Ray } from "./ray.js";
 import {
@@ -8,6 +9,7 @@ import {
   FOV,
   MOVE_STEP,
   WHITE,
+  YELLOW,
 } from "./util.js";
 
 export class Particle {
@@ -23,14 +25,22 @@ export class Particle {
     }
   }
 
+  /**
+   * Draw the particle
+   */
   draw() {
     this.ctx.beginPath();
     this.ctx.arc(this.pos.x, this.pos.y, 5, 0, 2 * Math.PI);
-    this.ctx.fillStyle = WHITE;
+    this.ctx.fillStyle = YELLOW;
     this.ctx.fill();
     this.ctx.closePath();
   }
 
+  /**
+   * Update the position of the particle
+   * @param {number} x
+   * @param {number} y
+   */
   updatePos(x, y) {
     this.pos.x = x;
     this.pos.y = y;
@@ -39,6 +49,10 @@ export class Particle {
     }
   }
 
+  /**
+   *  Rotate the particle by the given angle (in deg)
+   * @param {number} angle
+   */
   rotate(angle) {
     this.heading += angle;
     this.heading %= 360;
@@ -48,12 +62,21 @@ export class Particle {
     }
   }
 
+  /**
+   * Move the particle based on the heading angle
+   */
   move() {
     const dx = Math.cos(degToRad(this.heading)) * MOVE_STEP;
     const dy = Math.sin(degToRad(this.heading)) * MOVE_STEP;
     this.updatePos(Math.abs(this.pos.x - dx), Math.abs(this.pos.y - dy));
   }
 
+  /**
+   *  Cast rays from the particle to a list of walls, returns a list of distances of the closest intersection points
+   *  (the distances are adjusted to the length from the projection ray onto the particle plane).
+   * @param {Boundary[]} walls
+   * @returns {number[]}
+   */
   cast(walls) {
     const points = [];
     for (const ray of this.rays) {

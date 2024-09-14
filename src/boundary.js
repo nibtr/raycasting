@@ -5,6 +5,9 @@ export class Boundary {
     this.ctx = ctx;
   }
 
+  /**
+   * Draw the line of the boundary
+   */
   draw() {
     this.ctx.beginPath();
     this.ctx.lineWidth = 2;

@@ -1,25 +1,21 @@
 import { Particle } from "./particle.js";
 import { Point } from "./point.js";
 import { Boundary } from "./boundary.js";
-import {
-  calculateOpacity,
-  degToRad,
-  distance,
-  invert,
-  NUM_WALLS,
-  ROTATE_DEG,
-} from "./util.js";
+import { calculateOpacity, invert, NUM_WALLS, ROTATE_DEG } from "./util.js";
 
+// 2d-canvase
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const cursor = {
-  x: canvas.clientWidth / 3,
-  y: canvas.clientHeight / 2,
-};
+// 3d-canvas
+const canvas3d = document.getElementById("canvas-3d");
+const ctx3d = canvas3d.getContext("2d");
 
 // create new particle
-const particle = new Particle(ctx, new Point(cursor.x, cursor.y));
+const particle = new Particle(
+  ctx,
+  new Point(canvas.clientWidth / 2, canvas.clientHeight / 2)
+);
 
 const walls = [];
 
@@ -49,11 +45,6 @@ for (let i = 0; i < NUM_WALLS; i++) {
   );
 }
 
-addEventListener("mousemove", (e) => {
-  cursor.x = e.clientX - 2;
-  cursor.y = e.clientY - 2;
-});
-
 addEventListener("keydown", (e) => {
   if (e.key === "a") {
     particle.rotate(-ROTATE_DEG);
@@ -63,10 +54,6 @@ addEventListener("keydown", (e) => {
     particle.move();
   }
 });
-
-// 3d-canvas
-const canvas3d = document.getElementById("canvas-3d");
-const ctx3d = canvas3d.getContext("2d");
 
 function anim() {
   requestAnimationFrame(anim);
@@ -82,11 +69,13 @@ function anim() {
   const distances = particle.cast(walls); // get the list of distances after casting
 
   ctx3d.beginPath();
-  const columnW = canvas.clientWidth / distances.length; // calculate the width of a column of an intersection point
+
+  // calculate the width of a column of an intersection point
+  const columnW = canvas.clientWidth / distances.length;
   for (let i = 0; i < distances.length; i++) {
     const dis = distances[i];
 
-    const height = invert(dis);
+    const height = 20000 * invert(dis);
     const opacity = calculateOpacity(dis);
 
     ctx3d.fillStyle = `rgb(255 255 255 / ${1 - opacity})`;
