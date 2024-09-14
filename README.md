@@ -1,14 +1,11 @@
 # raycasting
 
-A simple raycasting with a light source and walls implemented using JS canvas APIs. This is a proof of concept for future Wolfenstein-style graphics ideas.
+A simple raycasting rendering in Wolfenstein-style using vanilla JS canvas APIs. The project is a proof of concept for future similar ideas (e.g. games, although unsure), and is built for educational purposes.
 
-![Screen Recording 2024-09-14 at 12 31 58 PM](https://github.com/user-attachments/assets/07ca1fde-037d-42ef-a57c-472a731d1a79)
+![rzA6nnhY](https://github.com/user-attachments/assets/48987de4-ad8f-4ba4-94b0-344b0a87fd4f)
 
-## TODO:
-
-- Render the graphics in Wolfenstein style
+*Note*: Since it is simply rendered on HTML canvas, poor performance on old machines and browsers are expected.
 
 ## References:
 
-- Line intersection: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line_segment
-- Raycasting: https://lodev.org/cgtutor/raycasting.html
+- The renderer is heavily inspired by [https://lodev.org/cgtutor/raycasting.html](https://lodev.org/cgtutor/raycasting.html)
