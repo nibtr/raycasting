@@ -7,6 +7,7 @@ export class Boundary {
 
   draw() {
     this.ctx.beginPath();
+    this.ctx.lineWidth = 1;
     this.ctx.strokeStyle = "#f5f6f7";
     this.ctx.moveTo(this.pt1.x, this.pt1.y);
     this.ctx.lineTo(this.pt2.x, this.pt2.y);

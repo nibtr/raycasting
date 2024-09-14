@@ -1,6 +1,6 @@
 import { Point } from "./point.js";
 import { Ray } from "./ray.js";
-import { distance } from "./util.js";
+import { ALPHA, distance } from "./util.js";
 
 export class Particle {
   constructor(ctx, pos) {
@@ -8,7 +8,7 @@ export class Particle {
     this.pos = pos;
 
     this.rays = [];
-    for (let a = 0; a <= 360; a += 2) {
+    for (let a = 0; a <= 360; a += ALPHA) {
       this.rays.push(new Ray(ctx, pos, a));
     }
   }
@@ -32,6 +32,7 @@ export class Particle {
   }
 
   cast(walls) {
+    // ref: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line_segment
     for (const ray of this.rays) {
       const min = new Point(Infinity, Infinity);
       for (const wall of walls) {
@@ -68,6 +69,7 @@ export class Particle {
   drawLine(pt1, pt2) {
     this.ctx.moveTo(pt1.x, pt1.y);
     this.ctx.lineTo(pt2.x, pt2.y);
+    this.ctx.lineWidth = 1;
     this.ctx.strokeStyle = "#f5f6f7";
     this.ctx.stroke();
   }

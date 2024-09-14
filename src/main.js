@@ -15,6 +15,7 @@ const particle = new Particle(ctx, new Point(cursor.x, cursor.y));
 particle.draw();
 
 const walls = [];
+
 // boundary
 const pt1 = new Point(0, 0);
 const pt2 = new Point(canvas.clientWidth, 0);
