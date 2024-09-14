@@ -1,6 +1,6 @@
 import { Point } from "./point.js";
 import { Ray } from "./ray.js";
-import { ALPHA, degToRad, distance, FOV, MOVE_STEP } from "./util.js";
+import { ALPHA, degToRad, distance, FOV, MOVE_STEP, WHITE } from "./util.js";
 
 export class Particle {
   constructor(ctx, pos) {
@@ -10,7 +10,7 @@ export class Particle {
 
     this.rays = [];
     let i = 0;
-    for (let a = 0; a <= FOV; a += ALPHA / 2) {
+    for (let a = 0; a <= FOV; a += ALPHA) {
       this.rays.push(new Ray(ctx, pos, a));
     }
   }
@@ -18,7 +18,7 @@ export class Particle {
   draw() {
     this.ctx.beginPath();
     this.ctx.arc(this.pos.x, this.pos.y, 5, 0, 2 * Math.PI);
-    this.ctx.fillStyle = "#f5f6f7";
+    this.ctx.fillStyle = WHITE;
     this.ctx.fill();
     this.ctx.closePath();
   }

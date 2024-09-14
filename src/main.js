@@ -6,7 +6,7 @@ import {
   distance,
   invert,
   NUM_WALLS,
-  WHITE,
+  ROTATE_DEG,
 } from "./util.js";
 
 const canvas = document.getElementById("canvas");
@@ -19,11 +19,10 @@ const cursor = {
 
 // create new particle
 const particle = new Particle(ctx, new Point(cursor.x, cursor.y));
-particle.draw();
 
 const walls = [];
 
-// boundary
+// canvas boundary
 const pt1 = new Point(0, 0);
 const pt2 = new Point(canvas.clientWidth, 0);
 const pt3 = new Point(canvas.clientWidth, canvas.clientHeight);
@@ -49,12 +48,6 @@ for (let i = 0; i < NUM_WALLS; i++) {
   );
 }
 
-for (const wall of walls) {
-  wall.draw();
-}
-
-const pillars = particle.cast(walls);
-
 addEventListener("mousemove", (e) => {
   cursor.x = e.clientX - 2;
   cursor.y = e.clientY - 2;
@@ -62,9 +55,9 @@ addEventListener("mousemove", (e) => {
 
 addEventListener("keydown", (e) => {
   if (e.key === "a") {
-    particle.rotate(-4);
+    particle.rotate(-ROTATE_DEG);
   } else if (e.key === "d") {
-    particle.rotate(4);
+    particle.rotate(ROTATE_DEG);
   } else if (e.key === "w") {
     particle.move();
   }
@@ -95,6 +88,7 @@ function anim() {
     const opacity = calculateOpacity(dis);
 
     ctx3d.fillStyle = `rgb(255 255 255 / ${1 - opacity})`;
+    ctx3d.strokeStyle = "transparent";
     ctx3d.fillRect(
       i * pillarW,
       canvas.clientHeight / 2 - height / 2,

@@ -2,10 +2,11 @@ export const WHITE = "#f5f6f7";
 
 export const NUM_WALLS = 5;
 
-export const ALPHA = 1; // deg
-export const FOV = 45; //deg
+export const ALPHA = 0.5; // deg
+export const FOV = 45; // deg
 
-export const MOVE_STEP = 3;
+export const MOVE_STEP = 1.5;
+export const ROTATE_DEG = 1.5;
 
 export function degToRad(deg) {
   return deg * (Math.PI / 180);
@@ -26,7 +27,6 @@ export function calculateOpacity(dis) {
 
   const distance = Math.max(minDis, Math.min(maxDis, dis));
 
-  // calculate opacity (1 = fully opaque, 0 = fully transparent)
   // higher distance should lead to higher transparency
   const opacity = (distance - minDis) / (maxDis - minDis);
 
