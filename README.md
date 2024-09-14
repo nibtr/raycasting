@@ -1,6 +1,6 @@
-# raycasting-demo
+# raycasting
 
-A simple raycasting with light source and walls implemented using JS canvas APIs. This is a proof of concept for future Wolfenstein-style graphics ideas.
+A simple raycasting with a light source and walls implemented using JS canvas APIs. This is a proof of concept for future Wolfenstein-style graphics ideas.
 
 ![Screen Recording 2024-09-14 at 12 31 58 PM](https://github.com/user-attachments/assets/07ca1fde-037d-42ef-a57c-472a731d1a79)
 
