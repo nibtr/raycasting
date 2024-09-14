@@ -1,28 +1,17 @@
+import { Player } from "./player.js";
 import { Point } from "./point.js";
+import { Boundary } from "./boundary.js";
 
 const canvas = document.getElementById("map");
-const context = canvas.getContext("2d");
+const ctx = canvas.getContext("2d");
 
-const cursor = {
-  x: canvas.clientWidth / 3,
-  y: canvas.clientHeight / 2,
-};
+// create new point
+const pt = new Player(ctx, new Point(100, 151));
+pt.draw();
+console.log(pt.dir);
 
-addEventListener("mousemove", (event) => {
-  cursor.x = event.clientX;
-  cursor.y = event.clientY;
-});
+const boundary = new Boundary(ctx, new Point(600, 150), new Point(600, 500));
+boundary.draw();
 
-const pt = new Point(cursor.x, cursor.y, context);
-
-function animate() {
-  requestAnimationFrame(animate);
-  context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
-
-  pt.draw();
-
-  // pt.x = cursor.x;
-  // pt.y = cursor.y;
-}
-
-animate();
+const ins = pt.cast(boundary);
+console.log(ins);
