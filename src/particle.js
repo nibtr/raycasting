@@ -58,16 +58,13 @@ export class Particle {
    * Move the particle based on the heading angle
    */
   move(dir) {
-    if (dir === FORWARD) {
-      const dx = Math.cos(degToRad(this.heading)) * MOVE_STEP;
-      const dy = Math.sin(degToRad(this.heading)) * MOVE_STEP;
-      this.updatePos(Math.abs(this.pos.x - dx), Math.abs(this.pos.y - dy));
-    }
-    if (dir === BACKWARD) {
-      const dx2 = Math.cos(degToRad(this.heading)) * -MOVE_STEP;
-      const dy2 = Math.sin(degToRad(this.heading)) * -MOVE_STEP;
-      this.updatePos(Math.abs(this.pos.x - dx2), Math.abs(this.pos.y - dy2));
-    }
+    const dx =
+      Math.cos(degToRad(this.heading)) *
+      (dir === FORWARD ? MOVE_STEP : -MOVE_STEP);
+    const dy =
+      Math.sin(degToRad(this.heading)) *
+      (dir === FORWARD ? MOVE_STEP : -MOVE_STEP);
+    this.updatePos(Math.abs(this.pos.x - dx), Math.abs(this.pos.y - dy));
   }
 
   /**
@@ -80,7 +77,7 @@ export class Particle {
     const points = [];
     for (const ray of this.rays) {
       const closest = {
-        point: new Point(Infinity, Infinity), // the closest intersection point
+        pos: new Point(Infinity, Infinity), // the closest intersection point
         dis: Infinity,
       };
 
@@ -109,16 +106,15 @@ export class Particle {
           const intersectionPoint = new Point(x, y);
 
           const dis = distance(this.pos, intersectionPoint);
-          if (dis < distance(this.pos, closest.point)) {
-            (closest.point = intersectionPoint), (closest.dis = dis);
+          if (dis < distance(this.pos, closest.pos)) {
+            (closest.pos = intersectionPoint), (closest.dis = dis);
           }
         }
       }
 
-      drawLine(this.ctx, this.pos, closest.point);
+      drawLine(this.ctx, this.pos, closest.pos);
 
-      // we need to adjust the distance from particle to point
-      // equals to the length from the projection of the ray onto the particle plane
+      // fix fisheye problem
       // ref: https://gamedev.stackexchange.com/questions/97574/how-can-i-fix-the-fisheye-distortion-in-my-raycast-renderer
       const adjustedDis =
         closest.dis * Math.cos(degToRad(ray.angle - this.heading));

@@ -51,18 +51,13 @@ for (let i = 0; i < NUM_WALLS; i++) {
 }
 
 window.addEventListener("keydown", (e) => {
-  if (e.key === "a") {
-    particle.rotate(-ROTATE_DEG);
-  }
-  if (e.key === "d") {
-    particle.rotate(ROTATE_DEG);
-  }
-  if (e.key === "w") {
-    particle.move(FORWARD);
-  }
-  if (e.key === "s") {
-    particle.move(BACKWARD);
-  }
+  const keyEvents = {
+    a: () => particle.rotate(-ROTATE_DEG),
+    d: () => particle.rotate(ROTATE_DEG),
+    w: () => particle.move(FORWARD),
+    s: () => particle.move(BACKWARD),
+  };
+  keyEvents[e.key] && keyEvents[e.key]();
 });
 
 function anim() {
@@ -71,11 +66,11 @@ function anim() {
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   ctx3d.clearRect(0, 0, canvas3d.clientWidth, canvas3d.clientHeight);
 
+  particle.draw();
   for (const wall of walls) {
     wall.draw();
   }
 
-  particle.draw();
   const distances = particle.cast(walls); // get the list of distances after casting
 
   ctx3d.beginPath();
