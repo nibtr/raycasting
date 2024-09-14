@@ -3,6 +3,7 @@ import { Point } from "./point.js";
 import { Boundary } from "./boundary.js";
 import {
   calculateOpacity,
+  degToRad,
   distance,
   invert,
   NUM_WALLS,
@@ -78,21 +79,22 @@ function anim() {
   }
 
   particle.draw();
-  const pillars = particle.cast(walls);
+  const distances = particle.cast(walls); // get the list of distances after casting
 
   ctx3d.beginPath();
-  const pillarW = canvas.clientWidth / pillars.length;
-  for (let i = 0; i < pillars.length; i++) {
-    const dis = distance(particle.pos, pillars[i]);
+  const columnW = canvas.clientWidth / distances.length; // calculate the width of a column of an intersection point
+  for (let i = 0; i < distances.length; i++) {
+    const dis = distances[i];
+
     const height = invert(dis);
     const opacity = calculateOpacity(dis);
 
     ctx3d.fillStyle = `rgb(255 255 255 / ${1 - opacity})`;
     ctx3d.strokeStyle = "transparent";
     ctx3d.fillRect(
-      i * pillarW,
+      i * columnW,
       canvas.clientHeight / 2 - height / 2,
-      pillarW,
+      columnW,
       height
     );
   }

@@ -8,6 +8,17 @@ export const FOV = 45; // deg
 export const MOVE_STEP = 1.5;
 export const ROTATE_DEG = 1.5;
 
+export function drawLine(ctx, pt1, pt2) {
+  ctx.beginPath();
+  ctx.moveTo(pt1.x, pt1.y);
+  ctx.lineTo(pt2.x, pt2.y);
+  ctx.lineWidth = 0.5;
+  ctx.lineJoin = "round";
+  ctx.strokeStyle = "#e8f4fc";
+  ctx.stroke();
+  ctx.closePath();
+}
+
 export function degToRad(deg) {
   return deg * (Math.PI / 180);
 }

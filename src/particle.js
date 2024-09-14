@@ -1,6 +1,14 @@
 import { Point } from "./point.js";
 import { Ray } from "./ray.js";
-import { ALPHA, degToRad, distance, FOV, MOVE_STEP, WHITE } from "./util.js";
+import {
+  ALPHA,
+  degToRad,
+  distance,
+  drawLine,
+  FOV,
+  MOVE_STEP,
+  WHITE,
+} from "./util.js";
 
 export class Particle {
   constructor(ctx, pos) {
@@ -47,11 +55,15 @@ export class Particle {
   }
 
   cast(walls) {
-    // ref: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line_segment
-
-    const pillars = [];
+    const points = [];
     for (const ray of this.rays) {
-      const min = new Point(Infinity, Infinity);
+      const closest = {
+        point: new Point(Infinity, Infinity), // the closest intersection point
+        dis: Infinity,
+      };
+
+      // find the intersection between 2 line segments
+      // ref: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line_segment
       for (const wall of walls) {
         const x1 = this.pos.x;
         const y1 = this.pos.y;
@@ -68,32 +80,29 @@ export class Particle {
         const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
         const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
 
+        // we don't check t <= 1 since the ray is infinitely long (not a segment)
         if (t >= 0 && u >= 0 && u <= 1) {
           const x = x3 + u * (x4 - x3);
           const y = y3 + u * (y4 - y3);
-          const intersection = new Point(x, y);
+          const intersectionPoint = new Point(x, y);
 
-          if (distance(this.pos, intersection) < distance(this.pos, min)) {
-            min.x = intersection.x;
-            min.y = intersection.y;
+          const dis = distance(this.pos, intersectionPoint);
+          if (dis < distance(this.pos, closest.point)) {
+            (closest.point = intersectionPoint), (closest.dis = dis);
           }
         }
       }
-      this.drawLine(this.pos, min);
-      pillars.push(min);
+
+      drawLine(this.ctx, this.pos, closest.point);
+
+      // we need to adjust the distance from particle to point
+      // equals to the length from the projection of the ray onto the particle plane
+      // ref: https://gamedev.stackexchange.com/questions/97574/how-can-i-fix-the-fisheye-distortion-in-my-raycast-renderer
+      const adjustedDis =
+        closest.dis * Math.cos(degToRad(ray.angle - this.heading));
+      points.push(adjustedDis);
     }
 
-    return pillars;
-  }
-
-  drawLine(pt1, pt2) {
-    this.ctx.beginPath();
-    this.ctx.moveTo(pt1.x, pt1.y);
-    this.ctx.lineTo(pt2.x, pt2.y);
-    this.ctx.lineWidth = 0.5;
-    this.ctx.lineJoin = "round";
-    this.ctx.strokeStyle = "#e8f4fc";
-    this.ctx.stroke();
-    this.ctx.closePath();
+    return points;
   }
 }
