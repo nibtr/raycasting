@@ -7,10 +7,12 @@ export const LIGHT_BLUE = "#e1f1fc";
 export const NUM_WALLS = 5;
 
 export const ALPHA = 0.5; // deg
-export const FOV = 40; // deg
+export const FOV = 60; // deg
 
-export const MOVE_STEP = 1;
-export const ROTATE_DEG = 1; // deg
+export const MOVE_STEP = 1.25;
+export const ROTATE_DEG = 1.5; // deg
+export const FORWARD = "FORWARD";
+export const BACKWARD = "BACKWARD";
 
 /**
  *  Draw a line between 2 points

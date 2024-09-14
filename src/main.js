@@ -1,15 +1,26 @@
 import { Particle } from "./particle.js";
 import { Point } from "./point.js";
 import { Boundary } from "./boundary.js";
-import { calculateOpacity, invert, NUM_WALLS, ROTATE_DEG } from "./util.js";
+import {
+  BACKWARD,
+  calculateOpacity,
+  FORWARD,
+  invert,
+  NUM_WALLS,
+  ROTATE_DEG,
+} from "./util.js";
 
-// 2d-canvase
-const canvas = document.getElementById("canvas");
+// 2d-canvas
+const canvas = document.getElementById("canvas-2d");
 const ctx = canvas.getContext("2d");
+ctx.canvas.width = window.innerWidth / 2.5;
+ctx.canvas.height = window.innerHeight / 2;
 
 // 3d-canvas
 const canvas3d = document.getElementById("canvas-3d");
 const ctx3d = canvas3d.getContext("2d");
+ctx3d.canvas.width = window.innerWidth / 2.5;
+ctx3d.canvas.height = window.innerHeight / 2;
 
 // create new particle
 const particle = new Particle(
@@ -45,13 +56,18 @@ for (let i = 0; i < NUM_WALLS; i++) {
   );
 }
 
-addEventListener("keydown", (e) => {
+window.addEventListener("keydown", (e) => {
   if (e.key === "a") {
     particle.rotate(-ROTATE_DEG);
-  } else if (e.key === "d") {
+  }
+  if (e.key === "d") {
     particle.rotate(ROTATE_DEG);
-  } else if (e.key === "w") {
-    particle.move();
+  }
+  if (e.key === "w") {
+    particle.move(FORWARD);
+  }
+  if (e.key === "s") {
+    particle.move(BACKWARD);
   }
 });
 

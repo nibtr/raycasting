@@ -3,9 +3,11 @@ import { Point } from "./point.js";
 import { Ray } from "./ray.js";
 import {
   ALPHA,
+  BACKWARD,
   degToRad,
   distance,
   drawLine,
+  FORWARD,
   FOV,
   MOVE_STEP,
   WHITE,
@@ -65,10 +67,17 @@ export class Particle {
   /**
    * Move the particle based on the heading angle
    */
-  move() {
-    const dx = Math.cos(degToRad(this.heading)) * MOVE_STEP;
-    const dy = Math.sin(degToRad(this.heading)) * MOVE_STEP;
-    this.updatePos(Math.abs(this.pos.x - dx), Math.abs(this.pos.y - dy));
+  move(dir) {
+    if (dir === FORWARD) {
+      const dx = Math.cos(degToRad(this.heading)) * MOVE_STEP;
+      const dy = Math.sin(degToRad(this.heading)) * MOVE_STEP;
+      this.updatePos(Math.abs(this.pos.x - dx), Math.abs(this.pos.y - dy));
+    }
+    if (dir === BACKWARD) {
+      const dx2 = Math.cos(degToRad(this.heading)) * -MOVE_STEP;
+      const dy2 = Math.sin(degToRad(this.heading)) * -MOVE_STEP;
+      this.updatePos(Math.abs(this.pos.x - dx2), Math.abs(this.pos.y - dy2));
+    }
   }
 
   /**
