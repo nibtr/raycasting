@@ -1,6 +1,6 @@
 import { Point } from "./point.js";
 import { Ray } from "./ray.js";
-import { distance, MAGNITUDE } from "./util.js";
+import { distance } from "./util.js";
 
 export class Particle {
   constructor(ctx, pos) {
@@ -8,18 +8,27 @@ export class Particle {
     this.pos = pos;
 
     this.rays = [];
-    for (let a = 0; a <= 360; a += 5) {
+    for (let a = 0; a <= 360; a += 2) {
       this.rays.push(new Ray(ctx, pos, a));
     }
   }
 
   draw() {
     this.ctx.beginPath();
-    this.ctx.arc(this.pos.x, this.pos.y, 8, 0, 2 * Math.PI);
+    this.ctx.arc(this.pos.x, this.pos.y, 5, 0, 2 * Math.PI);
     this.ctx.fillStyle = "#f5f6f7";
     this.ctx.fill();
 
     this.ctx.closePath();
+  }
+
+  update(x, y) {
+    this.pos.x = x;
+    this.pos.y = y;
+
+    for (const ray of this.rays) {
+      ray.update(this.pos);
+    }
   }
 
   cast(walls) {

@@ -1,7 +1,6 @@
 import { Particle } from "./particle.js";
 import { Point } from "./point.js";
 import { Boundary } from "./boundary.js";
-import { Ray } from "./ray.js";
 
 const canvas = document.getElementById("map");
 const ctx = canvas.getContext("2d");
@@ -15,10 +14,17 @@ const cursor = {
 const particle = new Particle(ctx, new Point(cursor.x, cursor.y));
 particle.draw();
 
-const boundary = new Boundary(ctx, new Point(600, 150), new Point(600, 500));
-boundary.draw();
-
 const walls = [];
+// boundary
+const pt1 = new Point(0, 0);
+const pt2 = new Point(canvas.clientWidth, 0);
+const pt3 = new Point(canvas.clientWidth, canvas.clientHeight);
+const pt4 = new Point(0, canvas.clientHeight);
+walls.push(new Boundary(ctx, pt1, pt2));
+walls.push(new Boundary(ctx, pt2, pt3));
+walls.push(new Boundary(ctx, pt3, pt4));
+walls.push(new Boundary(ctx, pt4, pt1));
+
 for (let i = 0; i < 5; i++) {
   walls.push(
     new Boundary(
@@ -36,27 +42,28 @@ for (let i = 0; i < 5; i++) {
 }
 
 for (const wall of walls) {
-  console.log(wall);
   wall.draw();
 }
 
 particle.cast(walls);
 
-// addEventListener("mousemove", (e) => {
-//   cursor.x = e.clientX - 2;
-//   cursor.y = e.clientY - 2;
-// });
+addEventListener("mousemove", (e) => {
+  cursor.x = e.clientX - 2;
+  cursor.y = e.clientY - 2;
+});
 
-// function anim() {
-//   requestAnimationFrame(anim);
+function anim() {
+  requestAnimationFrame(anim);
 
-//   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+  ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
-//   boundary.draw();
+  for (const wall of walls) {
+    wall.draw();
+  }
 
-//   pt.pt.x = cursor.x;
-//   pt.pt.y = cursor.y;
-//   pt.draw();
-// }
+  particle.draw();
+  particle.cast(walls);
+  particle.update(cursor.x, cursor.y);
+}
 
-// anim();
+anim();

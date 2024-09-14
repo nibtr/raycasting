@@ -7,10 +7,17 @@ export class Ray {
     this.pos = pos;
     this.angle = angle;
 
-    const x = MAGNITUDE * Math.cos(degToRad(angle));
-    const y = MAGNITUDE * Math.sin(degToRad(angle));
-    this.dir = new Point(Math.abs(pos.x - x), Math.abs(pos.y - y));
+    this.calculateDir();
   }
 
-  draw() {}
+  calculateDir() {
+    const x = MAGNITUDE * Math.cos(degToRad(this.angle));
+    const y = MAGNITUDE * Math.sin(degToRad(this.angle));
+    this.dir = new Point(Math.abs(this.pos.x - x), Math.abs(this.pos.y - y));
+  }
+
+  update(pos) {
+    this.pos = pos;
+    this.calculateDir();
+  }
 }
