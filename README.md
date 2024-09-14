@@ -8,8 +8,8 @@ A simple raycasting rendering in Wolfenstein-style using vanilla JS canvas APIs.
 
 ## Control
 
-- W: forward; S: backward; A,D: rotate
+W: forward; S: backward; A,D: rotate
 
-## References:
+## References
 
-- The renderer is heavily inspired by [https://lodev.org/cgtutor/raycasting.html](https://lodev.org/cgtutor/raycasting.html)
+The renderer is heavily inspired by [https://lodev.org/cgtutor/raycasting.html](https://lodev.org/cgtutor/raycasting.html) with some minor adjustments for simplicity.
