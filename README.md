@@ -6,6 +6,10 @@ A simple raycasting rendering in Wolfenstein-style using vanilla JS canvas APIs.
 
 *Note*: Since it is simply rendered on HTML canvas, poor performance on old machines and browsers are expected.
 
+## Control
+
+- W: forward; S: backward; A,D: rotate
+
 ## References:
 
 - The renderer is heavily inspired by [https://lodev.org/cgtutor/raycasting.html](https://lodev.org/cgtutor/raycasting.html)
