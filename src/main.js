@@ -50,8 +50,8 @@ for (const wall of walls) {
 particle.cast(walls);
 
 addEventListener("mousemove", (e) => {
-  cursor.x = e.clientX - 2;
-  cursor.y = e.clientY - 2;
+  cursor.x = e.clientX - canvas.offsetLeft;
+  cursor.y = e.clientY - canvas.offsetTop;
 });
 
 function anim() {
