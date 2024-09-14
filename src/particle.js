@@ -1,16 +1,16 @@
 import { Point } from "./point.js";
 import { Ray } from "./ray.js";
-import { ALPHA, degToRad, distance, DOF, MOVE_STEP } from "./util.js";
+import { ALPHA, degToRad, distance, FOV, MOVE_STEP } from "./util.js";
 
 export class Particle {
   constructor(ctx, pos) {
     this.ctx = ctx;
     this.pos = pos;
-    this.heading = DOF / 2;
+    this.heading = FOV / 2;
 
     this.rays = [];
     let i = 0;
-    for (let a = 0; a <= DOF; a += ALPHA) {
+    for (let a = 0; a <= FOV; a += ALPHA / 2) {
       this.rays.push(new Ray(ctx, pos, a));
     }
   }
@@ -20,6 +20,7 @@ export class Particle {
     this.ctx.arc(this.pos.x, this.pos.y, 5, 0, 2 * Math.PI);
     this.ctx.fillStyle = "#f5f6f7";
     this.ctx.fill();
+    this.ctx.closePath();
   }
 
   updatePos(x, y) {
@@ -47,6 +48,8 @@ export class Particle {
 
   cast(walls) {
     // ref: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line_segment
+
+    const pillars = [];
     for (const ray of this.rays) {
       const min = new Point(Infinity, Infinity);
       for (const wall of walls) {
@@ -77,7 +80,10 @@ export class Particle {
         }
       }
       this.drawLine(this.pos, min);
+      pillars.push(min);
     }
+
+    return pillars;
   }
 
   drawLine(pt1, pt2) {
