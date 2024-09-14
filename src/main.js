@@ -1,8 +1,9 @@
 import { Particle } from "./particle.js";
 import { Point } from "./point.js";
 import { Boundary } from "./boundary.js";
+import { NUM_WALLS } from "./util.js";
 
-const canvas = document.getElementById("map");
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 const cursor = {
@@ -26,7 +27,7 @@ walls.push(new Boundary(ctx, pt2, pt3));
 walls.push(new Boundary(ctx, pt3, pt4));
 walls.push(new Boundary(ctx, pt4, pt1));
 
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < NUM_WALLS; i++) {
   walls.push(
     new Boundary(
       ctx,

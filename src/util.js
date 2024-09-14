@@ -1,5 +1,5 @@
-export const MAGNITUDE = 1;
-export const ALPHA = 2; // deg
+export const ALPHA = 1; // deg
+export const NUM_WALLS = 5;
 
 export function degToRad(deg) {
   return deg * (Math.PI / 180);

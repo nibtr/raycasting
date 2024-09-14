@@ -8,7 +8,7 @@ export class Particle {
     this.pos = pos;
 
     this.rays = [];
-    for (let a = 0; a <= 360; a += ALPHA) {
+    for (let a = 0; a <= 360; a += ALPHA / 4) {
       this.rays.push(new Ray(ctx, pos, a));
     }
   }
@@ -67,10 +67,13 @@ export class Particle {
   }
 
   drawLine(pt1, pt2) {
+    this.ctx.beginPath();
     this.ctx.moveTo(pt1.x, pt1.y);
     this.ctx.lineTo(pt2.x, pt2.y);
-    this.ctx.lineWidth = 1;
-    this.ctx.strokeStyle = "#f5f6f7";
+    this.ctx.lineWidth = 0.5;
+    this.ctx.lineJoin = "round";
+    this.ctx.strokeStyle = "#e8f4fc";
     this.ctx.stroke();
+    this.ctx.closePath();
   }
 }

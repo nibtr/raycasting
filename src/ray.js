@@ -1,5 +1,5 @@
 import { Point } from "./point.js";
-import { degToRad, MAGNITUDE } from "./util.js";
+import { degToRad } from "./util.js";
 
 export class Ray {
   constructor(ctx, pos, angle) {
@@ -11,8 +11,8 @@ export class Ray {
   }
 
   calculateDir() {
-    const x = MAGNITUDE * Math.cos(degToRad(this.angle));
-    const y = MAGNITUDE * Math.sin(degToRad(this.angle));
+    const x = Math.cos(degToRad(this.angle));
+    const y = Math.sin(degToRad(this.angle));
     this.dir = new Point(Math.abs(this.pos.x - x), Math.abs(this.pos.y - y));
   }
 
