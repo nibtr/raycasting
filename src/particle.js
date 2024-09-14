@@ -1,26 +1,17 @@
 import { Point } from "./point.js";
 import { Ray } from "./ray.js";
-import {
-  ALPHA,
-  BACKWARD,
-  CLOCKWISE,
-  COUNTER_CLOCKWISE,
-  distance,
-  DOF,
-  FORWARD,
-  MOVE_STEP,
-} from "./util.js";
+import { ALPHA, degToRad, distance, DOF, MOVE_STEP } from "./util.js";
 
 export class Particle {
   constructor(ctx, pos) {
     this.ctx = ctx;
     this.pos = pos;
+    this.heading = DOF / 2;
 
     this.rays = [];
     let i = 0;
-    for (let a = 0; a <= DOF; a += DOF) {
+    for (let a = 0; a <= DOF; a += ALPHA) {
       this.rays.push(new Ray(ctx, pos, a));
-      // this.rays[i] = new Ray(ctx, pos, a);
     }
   }
 
@@ -29,46 +20,29 @@ export class Particle {
     this.ctx.arc(this.pos.x, this.pos.y, 5, 0, 2 * Math.PI);
     this.ctx.fillStyle = "#f5f6f7";
     this.ctx.fill();
-
-    this.ctx.closePath();
   }
 
   updatePos(x, y) {
     this.pos.x = x;
     this.pos.y = y;
-
     for (const ray of this.rays) {
       ray.updatePos(this.pos);
     }
   }
 
-  turn(dir) {
-    switch (dir) {
-      case CLOCKWISE:
-        for (const ray of this.rays) {
-          ray.updateAngle(ray.angle + 4);
-        }
-        break;
-      case COUNTER_CLOCKWISE:
-        for (const ray of this.rays) {
-          ray.updateAngle(ray.angle - 4);
-        }
-        break;
-      default:
-        throw new Error("Invalid turning option");
+  rotate(angle) {
+    this.heading += angle;
+    this.heading %= 360;
+
+    for (const ray of this.rays) {
+      ray.updateAngle(ray.angle + angle);
     }
-    console.log(this.rays[0]);
   }
 
-  move(dir) {
-    switch (dir) {
-      case FORWARD:
-        break;
-      case BACKWARD:
-        break;
-      default:
-        throw new Error("Invalid moving option");
-    }
+  move() {
+    const dx = Math.cos(degToRad(this.heading)) * MOVE_STEP;
+    const dy = Math.sin(degToRad(this.heading)) * MOVE_STEP;
+    this.updatePos(Math.abs(this.pos.x - dx), Math.abs(this.pos.y - dy));
   }
 
   cast(walls) {

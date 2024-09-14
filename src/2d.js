@@ -1,7 +1,7 @@
 import { Particle } from "./particle.js";
 import { Point } from "./point.js";
 import { Boundary } from "./boundary.js";
-import { CLOCKWISE, COUNTER_CLOCKWISE, NUM_WALLS } from "./util.js";
+import { NUM_WALLS } from "./util.js";
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -56,15 +56,12 @@ addEventListener("mousemove", (e) => {
 
 addEventListener("keydown", (e) => {
   if (e.key === "a") {
-    particle.turn(COUNTER_CLOCKWISE);
+    particle.rotate(-4);
   } else if (e.key === "d") {
-    particle.turn(CLOCKWISE);
+    particle.rotate(4);
+  } else if (e.key === "w") {
+    particle.move();
   }
-  // } else if (e.key === "w") {
-  //   particle.updatePos(particle.pos.x + 10, particle.pos.y);
-  // } else if (e.key === "s") {
-  //   particle.updatePos(particle.pos.x, particle.pos.y + 10);
-  // }
 });
 
 function anim() {
