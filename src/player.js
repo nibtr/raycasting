@@ -130,8 +130,9 @@ export class Player {
       }
 
       let hit = false;
-      let dis;
-      while (!hit) {
+      const maxDis = 700;
+      let dis = 0;
+      while (!hit && dis < maxDis) {
         // jump to next map square, either in x-direction, or in y-direction
         if (sideDistX < sideDistY) {
           mapX += stepX;
@@ -143,7 +144,13 @@ export class Player {
           sideDistY += deltaDistY * UNIT;
         }
         // check if ray has hit a wall
-        if (world.walls[mapY][mapX].val > 0) {
+        if (
+          mapX >= 0 &&
+          mapX < world.walls.length &&
+          mapY >= 0 &&
+          mapY < world.walls.length &&
+          world.walls[mapY][mapX].val > 0
+        ) {
           hit = 1;
         }
       }
