@@ -2,9 +2,10 @@ import { Point } from "./point.js";
 import { degToRad } from "./util.js";
 
 export class Ray {
-  constructor(ctx, pos, angle) {
+  constructor(ctx, x, y, angle) {
     this.ctx = ctx;
-    this.pos = pos;
+    this.x = x;
+    this.y = y;
     this.angle = angle;
 
     this.calculateDir();
@@ -13,11 +14,12 @@ export class Ray {
   calculateDir() {
     const dx = Math.cos(degToRad(this.angle));
     const dy = Math.sin(degToRad(this.angle));
-    this.dir = new Point(Math.abs(this.pos.x - dx), Math.abs(this.pos.y - dy));
+    this.dir = { x: Math.abs(this.x - dx), y: Math.abs(this.y - dy) };
   }
 
-  updatePos(pos) {
-    this.pos = pos;
+  updatePos(x, y) {
+    this.x = x;
+    this.y = y;
     this.calculateDir();
   }
 

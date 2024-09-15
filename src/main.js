@@ -1,4 +1,4 @@
-import { Particle } from "./particle.js";
+import { Particle } from "./player.js";
 import { Point } from "./point.js";
 import { Boundary } from "./boundary.js";
 import { calculateOpacity, invert } from "./util.js";
