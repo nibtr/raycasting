@@ -1,11 +1,12 @@
 import { World } from "./world.js";
 import { Player } from "./player.js";
+import { HEIGHT, WIDTH } from "./const.js";
 
 // init canvas
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-ctx.canvas.width = 800;
-ctx.canvas.height = 800;
+ctx.canvas.width = WIDTH;
+ctx.canvas.height = HEIGHT;
 
 // create new world
 const world = new World(ctx);
@@ -20,7 +21,10 @@ function anim() {
   world.draw();
 
   player.draw();
-  // player.look(world);
+  // for (const ray of player.rays) {
+  //   ray.draw();
+  // }
+  player.look(world);
 }
 
 anim();

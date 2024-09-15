@@ -1,4 +1,4 @@
-import { BLACK, MAP, SIZE, WHITE } from "./const.js";
+import { BLACK, MAP, UNIT, WHITE } from "./const.js";
 
 export class Box {
   constructor(ctx, x, y, val) {
@@ -11,41 +11,37 @@ export class Box {
 
 export class World {
   constructor(ctx) {
-    this.size = SIZE;
     this.walls = [];
     this.mapWalls = {};
     this.ctx = ctx;
+    // for (let i = 0; i < MAP.length; i++) {
+    //   const y = i * size;
+    //   this.walls[i] = [];
+    //   this.mapWalls[y] = {};
+    //   for (let j = 0; j < MAP[i].length; j++) {
+    //     const x = j * size;
+    //     const s = this.ctx.canvas.width / GRID_SIZE;
+    //     this.walls[i][j] = new Box(this.ctx, j * s, i * s, MAP[i][j]);
+    //     this.mapWalls[y][x] = new Box(this.ctx, j * s, i * s, MAP[i][j]);
+    //   }
+    // }
 
-    const size = this.ctx.canvas.width / SIZE;
-    for (let i = 0; i < SIZE; i++) {
-      const y = i * size;
+    for (let i = 0; i < MAP.length; i++) {
       this.walls[i] = [];
-      this.mapWalls[y] = {};
-      for (let j = 0; j < SIZE; j++) {
-        const x = j * size;
-        const s = this.ctx.canvas.width / SIZE;
-        this.walls[i][j] = new Box(this.ctx, j * s, i * s, MAP[i][j]);
-        this.mapWalls[y][x] = new Box(this.ctx, j * s, i * s, MAP[i][j]);
+      for (let j = 0; j < MAP.length; j++) {
+        this.walls[i][j] = new Box(ctx, j * UNIT, i * UNIT, MAP[i][j]);
       }
     }
-
-    console.log(this.mapWalls);
   }
 
   draw() {
     this.ctx.beginPath();
-    const s = canvas.clientWidth / SIZE;
-    // for (let i = 0; i < this.walls.length; i++) {
-    //   for (let j = 0; j < this.walls[i].length; j++) {
-    //     const box = this.walls[i][j];
-    //     this.ctx.fillStyle = box.val ? WHITE : BLACK;
-    //     this.ctx.fillRect(box.x + j, box.y + i, s, s);
-    //   }
-    // }
-    const walls = this.walls.flat();
-    for (const box of walls) {
-      this.ctx.fillStyle = box.val ? WHITE : BLACK;
-      this.ctx.fillRect(box.x, box.y, s, s);
+    for (let i = 0; i < this.walls.length; i++) {
+      for (let j = 0; j < this.walls[i].length; j++) {
+        const box = this.walls[i][j];
+        this.ctx.fillStyle = box.val ? WHITE : BLACK;
+        this.ctx.fillRect(box.x + j, box.y + i, 1 * UNIT, 1 * UNIT);
+      }
     }
     this.ctx.closePath();
   }

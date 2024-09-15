@@ -19,9 +19,9 @@ export class Player {
     this.x = x;
     this.y = y;
     this.heading = 0;
+    this.fov = FOV;
 
     this.rays = [];
-    let i = 0;
     for (let a = 0; a <= 0; a += 1) {
       this.rays.push(new Ray(ctx, x, y, a));
     }
@@ -43,7 +43,7 @@ export class Player {
    */
   draw() {
     this.ctx.beginPath();
-    this.ctx.arc(this.x, this.y, 8, 0, 2 * Math.PI);
+    this.ctx.arc(this.x, this.y, 5, 0, 2 * Math.PI);
     this.ctx.fillStyle = YELLOW;
     this.ctx.fill();
     this.ctx.closePath();
@@ -154,60 +154,9 @@ export class Player {
     // ref: https://lodev.org/cgtutor/raycasting.html
     for (const ray of this.rays) {
       // which box we're in
-      let mapX = Math.floor(this.x);
-      let mapY = Math.floor(this.y);
-
-      // length of ray from current position to next x or y-side
-      let sideDistX, sideDistY;
-
-      const deltaDistX = ray.dir.x == 0 ? Infinity : Math.abs(1 / ray.dir.x);
-      const deltaDistY = ray.dir.y == 0 ? Infinity : Math.abs(1 / ray.dir.y);
-
-      let perpWallDist;
-
-      //what direction to step in x or y-direction (either +1 or -1)
-      let stepX;
-      let stepY;
-
-      let hit = 0; //was there a wall hit?
-      let side; //was a NS or a EW wall hit?
-
-      if (ray.dir.x < 0) {
-        stepX = -1;
-        sideDistX = (this.x - mapX) * deltaDistX;
-      } else {
-        stepX = 1;
-        sideDistX = (mapX + 1.0 - this.x) * deltaDistX;
-      }
-
-      if (ray.dir.y < 0) {
-        stepY = -1;
-        sideDistY = (this.y - mapY) * deltaDistY;
-      } else {
-        stepY = 1;
-        sideDistY = (mapY + 1.0 - this.y) * deltaDistY;
-      }
-
-      //perform DDA
-      while (hit == 0) {
-        //jump to next map square, either in x-direction, or in y-direction
-        if (sideDistX < sideDistY) {
-          sideDistX += deltaDistX;
-          mapX += stepX;
-          side = 0;
-        } else {
-          sideDistY += deltaDistY;
-          mapY += stepY;
-          side = 1;
-        }
-
-        if (world.mapWalls[mapX]?.[mapY]?.val > 0) hit = 1;
-        if (world.mapWalls[mapX]?.[mapY]?.val > 0) hit = 1;
-      }
-
-      // // fisheye problem
-      // if (side == 0) perpWallDist = sideDistX - deltaDistX;
-      // else perpWallDist = sideDistY - deltaDistY;
+      // let mapX = Math.floor(this.x / GRID_SIZE);
+      // let mapY = Math.floor(this.y / GRID_SIZE);
+      // console.log(mapX, mapY);
     }
   }
 }
