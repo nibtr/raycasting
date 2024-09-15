@@ -1,5 +1,4 @@
 import { WHITE } from "./const.js";
-import { Point } from "./point.js";
 import { degToRad } from "./util.js";
 
 export class Ray {
@@ -33,7 +32,10 @@ export class Ray {
   draw() {
     this.ctx.beginPath();
     this.ctx.moveTo(this.x, this.y);
-    this.ctx.lineTo(this.dir.x, this.dir.y);
+    this.ctx.lineTo(
+      Math.abs(20 * this.dir.x - this.x),
+      Math.abs(20 * this.dir.y - this.y)
+    );
     this.ctx.strokeStyle = WHITE;
     this.ctx.stroke();
     this.ctx.closePath();

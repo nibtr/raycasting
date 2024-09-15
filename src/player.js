@@ -5,6 +5,7 @@ import {
   FOV,
   MOVE_STEP,
   ROTATE_DEG,
+  UNIT,
   WHITE,
   YELLOW,
 } from "./const.js";
@@ -18,11 +19,11 @@ export class Player {
     this.ctx = ctx;
     this.x = x;
     this.y = y;
-    this.heading = 0;
+    this.heading = FOV / 2;
     this.fov = FOV;
 
     this.rays = [];
-    for (let a = 0; a <= 0; a += 1) {
+    for (let a = 0; a <= FOV; a += 1) {
       this.rays.push(new Ray(ctx, x, y, a));
     }
 
@@ -146,7 +147,6 @@ export class Player {
   }
 
   /**
-   *
    * @param {World} world
    */
   look(world) {
@@ -154,9 +154,82 @@ export class Player {
     // ref: https://lodev.org/cgtutor/raycasting.html
     for (const ray of this.rays) {
       // which box we're in
-      // let mapX = Math.floor(this.x / GRID_SIZE);
-      // let mapY = Math.floor(this.y / GRID_SIZE);
-      // console.log(mapX, mapY);
+      let mapX = Math.floor(this.x / UNIT);
+      let mapY = Math.floor(this.y / UNIT);
+
+      let sideDistX;
+      let sideDistY;
+
+      let deltaDistX =
+        ray.dir.x === 0 ? Infinity : Math.abs((1 * UNIT) / ray.dir.x);
+      let deltaDistY =
+        ray.dir.y === 0 ? Infinity : Math.abs((1 * UNIT) / ray.dir.y);
+
+      let stepX;
+      let stepY;
+
+      let hit = false; //was there a wall hit?
+      let side; //was a NS or a EW wall hit?
+
+      if (ray.dir.x < 0) {
+        stepX = -1;
+        sideDistX = (this.x / UNIT - mapX) * deltaDistX;
+      } else {
+        stepX = 1;
+        sideDistX = (mapX + 1.0 - this.x / UNIT) * deltaDistX;
+      }
+      if (ray.dir.y < 0) {
+        stepY = -1;
+        sideDistY = (this.y / UNIT - mapY) * deltaDistY;
+      } else {
+        stepY = 1;
+        sideDistY = (mapY + 1.0 - this.y / UNIT) * deltaDistY;
+      }
+
+      let distance;
+      while (!hit) {
+        //jump to next map square, either in x-direction, or in y-direction
+        if (sideDistX < sideDistY) {
+          sideDistX += deltaDistX;
+          mapX += stepX;
+          // distance = sideDistX;
+          side = 0;
+        } else {
+          sideDistY += deltaDistY;
+          mapY += stepY;
+          // distance = sideDistY;
+          side = 1;
+        }
+        //Check if ray has hit a wall
+        if (world.walls[mapY][mapX]) hit = true;
+      }
+
+      let intersection;
+      if (side === 0) {
+        intersection = {
+          x: ray.x + ray.dir.x * sideDistX,
+          y: ray.y + ray.dir.y * sideDistX,
+        };
+      } else {
+        intersection = {
+          x: ray.x + ray.dir.x * sideDistY,
+          y: ray.y + ray.dir.y * sideDistY,
+        };
+      }
+      // intersection = {
+      //   x: ray.x + ray.dir.x * distance,
+      //   y: ray.y + ray.dir.y * distance,
+      // };
+
+      // console.log(sideDistX, sideDistY);
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.x, this.y);
+      this.ctx.lineTo(intersection.x, intersection.y);
+      this.ctx.strokeStyle = YELLOW;
+      this.ctx.lineWidth = 4;
+      this.ctx.stroke();
+      this.ctx.closePath();
+      // console.log(intersection);
     }
   }
 }

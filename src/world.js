@@ -12,7 +12,6 @@ export class Box {
 export class World {
   constructor(ctx) {
     this.walls = [];
-    this.mapWalls = {};
     this.ctx = ctx;
     // for (let i = 0; i < MAP.length; i++) {
     //   const y = i * size;
@@ -40,7 +39,7 @@ export class World {
       for (let j = 0; j < this.walls[i].length; j++) {
         const box = this.walls[i][j];
         this.ctx.fillStyle = box.val ? WHITE : BLACK;
-        this.ctx.fillRect(box.x + j, box.y + i, 1 * UNIT, 1 * UNIT);
+        this.ctx.fillRect(box.x, box.y, 1 * UNIT, 1 * UNIT);
       }
     }
     this.ctx.closePath();
