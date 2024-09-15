@@ -1,17 +1,14 @@
 import {
   ALPHA,
   BACKWARD,
-  DEG,
   FORWARD,
   FOV,
   MOVE_STEP,
   ROTATE_DEG,
   UNIT,
-  WHITE,
   YELLOW,
 } from "./const.js";
-import { Box, World } from "./world.js";
-import { Point } from "./point.js";
+import { World } from "./world.js";
 import { Ray } from "./ray.js";
 import { degToRad, distance, drawLine } from "./util.js";
 
@@ -23,7 +20,7 @@ export class Player {
     this.heading = FOV / 2 - 180;
 
     this.rays = [];
-    for (let a = 0; a <= FOV; a += 1) {
+    for (let a = 0; a <= FOV; a += ALPHA) {
       this.rays.push(new Ray(ctx, x, y, a));
     }
 
@@ -90,63 +87,8 @@ export class Player {
   }
 
   /**
-   *  Cast rays from the player to a list of walls, returns a list of distances of the closest intersection points
+   *  Cast rays from the player out to the world, returns a list of distances of the closest intersection points
    *  (the distances are adjusted to the length from the projection ray onto the player plane).
-   * @param {Box[]} walls
-   * @returns {number[]}
-   */
-  cast(walls) {
-    const points = [];
-    for (const ray of this.rays) {
-      const closest = {
-        pos: new Point(Infinity, Infinity), // the closest intersection point
-        dis: Infinity,
-      };
-
-      // find the intersection between 2 line segments
-      // ref: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line_segment
-      for (const wall of walls) {
-        const x1 = this.x;
-        const y1 = this.y;
-        const x2 = ray.dir.x;
-        const y2 = ray.dir.y;
-        const x3 = wall.pt1.x;
-        const y3 = wall.pt1.y;
-        const x4 = wall.pt2.x;
-        const y4 = wall.pt2.y;
-
-        const den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-        if (den == 0) continue;
-
-        const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
-        const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
-
-        // we don't check t <= 1 since the ray is infinitely long (not a segment)
-        if (t >= 0 && u >= 0 && u <= 1) {
-          const x = x3 + u * (x4 - x3);
-          const y = y3 + u * (y4 - y3);
-          const intersectionPoint = new Point(x, y);
-
-          const dis = distance(this.pos, intersectionPoint);
-          if (dis < distance(this.pos, closest.pos)) {
-            (closest.pos = intersectionPoint), (closest.dis = dis);
-          }
-        }
-      }
-
-      drawLine(this.ctx, this.pos, closest.pos);
-
-      // fix fisheye problem
-      // ref: https://gamedev.stackexchange.com/questions/97574/how-can-i-fix-the-fisheye-distortion-in-my-raycast-renderer
-      const adjustedDis =
-        closest.dis * Math.cos(degToRad(ray.angle - this.heading));
-      points.push(adjustedDis);
-    }
-
-    return points;
-  }
-
-  /**
    * @param {World} world
    */
   look(world) {
@@ -154,8 +96,7 @@ export class Player {
     // ref: https://lodev.org/cgtutor/raycasting.html
     const points = [];
     for (const ray of this.rays) {
-      // which box we're in
-      // debugger;
+      // coord of the box we're in
       let mapX = Math.floor(this.x / UNIT);
       let mapY = Math.floor(this.y / UNIT);
 
@@ -163,7 +104,7 @@ export class Player {
       let deltaDistX = ray.dir.x === 0 ? Infinity : Math.abs(1 / ray.dir.x);
       let deltaDistY = ray.dir.y === 0 ? Infinity : Math.abs(1 / ray.dir.y);
 
-      //what direction to step in x or y-direction (either +1 or -1)
+      // what direction to step in x or y-direction (either +1 or -1)
       let stepX;
       let stepY;
 
@@ -172,7 +113,7 @@ export class Player {
       let sideDistX;
       let sideDistY;
 
-      //calculate step and initial sideDist
+      // calculate step and initial sideDist
       if (ray.dir.x < 0) {
         stepX = -1;
         sideDistX = (this.x - mapX * UNIT) * deltaDistX;
@@ -191,7 +132,7 @@ export class Player {
       let hit = false;
       let dis;
       while (!hit) {
-        //jump to next map square, either in x-direction, or in y-direction
+        // jump to next map square, either in x-direction, or in y-direction
         if (sideDistX < sideDistY) {
           mapX += stepX;
           dis = sideDistX; // author's algo is somehow different so I added this
@@ -201,7 +142,7 @@ export class Player {
           dis = sideDistY;
           sideDistY += deltaDistY * UNIT;
         }
-        //Check if ray has hit a wall
+        // check if ray has hit a wall
         if (world.walls[mapY][mapX].val > 0) {
           hit = 1;
         }
@@ -210,11 +151,12 @@ export class Player {
       // find collision point
       const hitX = this.x + dis * ray.dir.x;
       const hitY = this.y + dis * ray.dir.y;
-      drawLine(this.ctx, this.x, this.y, hitX, hitY, YELLOW);
+      drawLine(this.ctx, this.x, this.y, hitX, hitY);
 
-      const adjustedDis =
+      const adjustedDis = Math.abs(
         distance(this.x, this.y, hitX, hitY) *
-        Math.cos(degToRad(ray.angle - this.heading));
+          Math.cos(degToRad(ray.angle - this.heading))
+      );
       points.push(adjustedDis);
     }
 

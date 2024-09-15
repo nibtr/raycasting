@@ -1,12 +1,14 @@
-import { LIGHT_BLUE } from "./const.js";
-import { Point } from "./point.js";
+import { LIGHT_BLUE, WALL_HEIGHT } from "./const.js";
 
 /**
  *  Draw a line between 2 points
+ *
  * @param {CanvasRenderingContext2D} ctx
- * @param {string} color
- * @param {Point} pt1
- * @param {Point} pt2
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @param {string | null} color
  */
 export function drawLine(ctx, x1, y1, x2, y2, color = LIGHT_BLUE) {
   ctx.beginPath();
@@ -30,8 +32,10 @@ export function degToRad(deg) {
 
 /**
  * Calculate the Euclidean distance between 2 points
- * @param {Point} pt1
- * @param {Point} pt2
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
  * @returns {number}
  */
 export function distance(x1, y1, x2, y2) {
@@ -64,4 +68,31 @@ export function calculateOpacity(dis) {
 
   // ensure opacity is within the 0 to 1 range
   return Math.max(0, Math.min(1, opacity));
+}
+
+/**
+ * Render the pseudo-3d based on the a list of distances of intersection points when casting
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {number[]} distances
+ */
+export function render3d(ctx, distances) {
+  ctx.beginPath();
+  const columnW = ctx.canvas.clientWidth / distances.length;
+
+  for (let i = 0; i < distances.length; i++) {
+    const dis = distances[i];
+
+    const height = WALL_HEIGHT * ctx.canvas.clientWidth * invert(dis);
+    const opacity = calculateOpacity(dis);
+
+    ctx.fillStyle = `rgb(255 255 255 / ${1 - opacity})`;
+    ctx.strokeStyle = "transparent";
+    ctx.fillRect(
+      i * columnW,
+      ctx.canvas.clientHeight / 2 - height / 2,
+      columnW,
+      height
+    );
+  }
+  ctx.closePath();
 }
