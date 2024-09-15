@@ -38,7 +38,7 @@ export class World {
     for (let i = 0; i < this.walls.length; i++) {
       for (let j = 0; j < this.walls[i].length; j++) {
         const box = this.walls[i][j];
-        this.ctx.fillStyle = box.val ? WHITE : BLACK;
+        this.ctx.fillStyle = box.val === 1 ? WHITE : BLACK;
         this.ctx.fillRect(box.x, box.y, 1 * UNIT, 1 * UNIT);
       }
     }

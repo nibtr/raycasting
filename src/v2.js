@@ -1,6 +1,6 @@
 import { World } from "./world.js";
 import { Player } from "./player.js";
-import { HEIGHT, WIDTH } from "./const.js";
+import { HEIGHT, UNIT, WIDTH } from "./const.js";
 
 // init canvas
 const canvas = document.getElementById("canvas");
@@ -12,7 +12,7 @@ ctx.canvas.height = HEIGHT;
 const world = new World(ctx);
 
 // create new player
-const player = new Player(ctx, canvas.clientWidth / 2, canvas.clientHeight / 2);
+const player = new Player(ctx, 3 * UNIT - 50, 3.5 * UNIT);
 
 function anim() {
   requestAnimationFrame(anim);

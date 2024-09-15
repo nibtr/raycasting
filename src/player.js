@@ -1,6 +1,7 @@
 import {
   ALPHA,
   BACKWARD,
+  DEG,
   FORWARD,
   FOV,
   MOVE_STEP,
@@ -20,7 +21,6 @@ export class Player {
     this.x = x;
     this.y = y;
     this.heading = FOV / 2;
-    this.fov = FOV;
 
     this.rays = [];
     for (let a = 0; a <= FOV; a += 1) {
@@ -32,8 +32,8 @@ export class Player {
       const keyEvents = {
         a: () => this.rotate(-ROTATE_DEG),
         d: () => this.rotate(ROTATE_DEG),
-        w: () => this.move(FORWARD),
-        s: () => this.move(BACKWARD),
+        w: () => this.move(BACKWARD),
+        s: () => this.move(FORWARD),
       };
       keyEvents[e.key] && keyEvents[e.key]();
     });
@@ -152,84 +152,71 @@ export class Player {
   look(world) {
     // DDA algorithm
     // ref: https://lodev.org/cgtutor/raycasting.html
+    const points = [];
     for (const ray of this.rays) {
       // which box we're in
+      // debugger;
       let mapX = Math.floor(this.x / UNIT);
       let mapY = Math.floor(this.y / UNIT);
 
-      let sideDistX;
-      let sideDistY;
+      // length of ray from one x or y-side to next x or y-side
+      let deltaDistX = ray.dir.x === 0 ? Infinity : Math.abs(1 / ray.dir.x);
+      let deltaDistY = ray.dir.y === 0 ? Infinity : Math.abs(1 / ray.dir.y);
 
-      let deltaDistX =
-        ray.dir.x === 0 ? Infinity : Math.abs((1 * UNIT) / ray.dir.x);
-      let deltaDistY =
-        ray.dir.y === 0 ? Infinity : Math.abs((1 * UNIT) / ray.dir.y);
-
+      //what direction to step in x or y-direction (either +1 or -1)
       let stepX;
       let stepY;
 
-      let hit = false; //was there a wall hit?
-      let side; //was a NS or a EW wall hit?
+      // sideDistX and sideDistY are initially the distance the ray has to travel
+      // from its start position to the first x-side and the first y-side
+      let sideDistX;
+      let sideDistY;
 
+      //calculate step and initial sideDist
       if (ray.dir.x < 0) {
         stepX = -1;
-        sideDistX = (this.x / UNIT - mapX) * deltaDistX;
+        sideDistX = (this.x - mapX * UNIT) * deltaDistX;
       } else {
         stepX = 1;
-        sideDistX = (mapX + 1.0 - this.x / UNIT) * deltaDistX;
+        sideDistX = ((mapX + 1) * UNIT - this.x) * deltaDistX;
       }
       if (ray.dir.y < 0) {
         stepY = -1;
-        sideDistY = (this.y / UNIT - mapY) * deltaDistY;
+        sideDistY = (this.y - mapY * UNIT) * deltaDistY;
       } else {
         stepY = 1;
-        sideDistY = (mapY + 1.0 - this.y / UNIT) * deltaDistY;
+        sideDistY = ((mapY + 1) * UNIT - this.y) * deltaDistY;
       }
 
+      let hit = false;
+      let side;
       let distance;
       while (!hit) {
         //jump to next map square, either in x-direction, or in y-direction
         if (sideDistX < sideDistY) {
-          sideDistX += deltaDistX;
           mapX += stepX;
-          // distance = sideDistX;
+          distance = sideDistX; // original is incorrect so I add this
+          sideDistX += deltaDistX * UNIT;
           side = 0;
         } else {
-          sideDistY += deltaDistY;
           mapY += stepY;
-          // distance = sideDistY;
+          distance = sideDistY;
+          sideDistY += deltaDistY * UNIT;
           side = 1;
         }
         //Check if ray has hit a wall
-        if (world.walls[mapY][mapX]) hit = true;
+        if (world.walls[mapY][mapX].val > 0) {
+          hit = 1;
+        }
       }
 
-      let intersection;
-      if (side === 0) {
-        intersection = {
-          x: ray.x + ray.dir.x * sideDistX,
-          y: ray.y + ray.dir.y * sideDistX,
-        };
-      } else {
-        intersection = {
-          x: ray.x + ray.dir.x * sideDistY,
-          y: ray.y + ray.dir.y * sideDistY,
-        };
-      }
-      // intersection = {
-      //   x: ray.x + ray.dir.x * distance,
-      //   y: ray.y + ray.dir.y * distance,
-      // };
-
-      // console.log(sideDistX, sideDistY);
-      this.ctx.beginPath();
-      this.ctx.moveTo(this.x, this.y);
-      this.ctx.lineTo(intersection.x, intersection.y);
-      this.ctx.strokeStyle = YELLOW;
-      this.ctx.lineWidth = 4;
-      this.ctx.stroke();
-      this.ctx.closePath();
-      // console.log(intersection);
+      // find collision point
+      const hitX = this.x + distance * ray.dir.x;
+      const hitY = this.y + distance * ray.dir.y;
+      drawLine(this.ctx, this.x, this.y, hitX, hitY, YELLOW);
+      points.push({ x: hitX, y: hitY });
     }
+
+    return points;
   }
 }

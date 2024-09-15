@@ -12,9 +12,11 @@ export class Ray {
   }
 
   calculateDir() {
-    const dx = Math.cos(degToRad(this.angle));
-    const dy = Math.sin(degToRad(this.angle));
+    const rad = degToRad(this.angle);
+    const dx = Math.cos(rad);
+    const dy = Math.sin(rad);
     this.dir = { x: dx, y: dy };
+    // console.log("dir", this.dir);
   }
 
   updatePos(x, y) {

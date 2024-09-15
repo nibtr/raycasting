@@ -8,11 +8,11 @@ import { Point } from "./point.js";
  * @param {Point} pt1
  * @param {Point} pt2
  */
-export function drawLine(ctx, pt1, pt2, color = LIGHT_BLUE) {
+export function drawLine(ctx, x1, y1, x2, y2, color = LIGHT_BLUE) {
   ctx.beginPath();
-  ctx.moveTo(pt1.x, pt1.y);
-  ctx.lineTo(pt2.x, pt2.y);
-  ctx.lineWidth = 0.5;
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.lineWidth = 2;
   ctx.lineJoin = "round";
   ctx.strokeStyle = color;
   ctx.stroke();
@@ -34,8 +34,8 @@ export function degToRad(deg) {
  * @param {Point} pt2
  * @returns {number}
  */
-export function distance(pt1, pt2) {
-  return Math.sqrt(Math.pow(pt1.x - pt2.x, 2) + Math.pow(pt1.y - pt2.y, 2));
+export function distance(x1, y1, x2, y2) {
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
 
 /**

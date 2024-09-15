@@ -1,16 +1,17 @@
-export const WIDTH = 500; // canvas width
-export const HEIGHT = 500; // canvas height
+export const WIDTH = 600; // canvas width
+export const HEIGHT = 600; // canvas height
 
 export const MAP = [
   [1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 1, 0, 0, 0, 0, 1],
-  [1, 0, 1, 0, 0, 1, 0, 1],
-  [1, 0, 1, 0, 0, 0, 0, 1],
-  [1, 0, 1, 0, 0, 0, 1, 1],
+  [1, 0, 0, 0, 0, 0, 0, 1],
   [1, 0, 0, 1, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 1, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 1, 0, 1],
   [1, 0, 0, 0, 0, 0, 0, 1],
   [1, 1, 1, 1, 1, 1, 1, 1],
 ];
+
 export const UNIT = WIDTH / MAP.length; // 1 tile unit scaled to canvas size
 
 export const BLACK = "#000000";
