@@ -2,7 +2,13 @@ import { Particle } from "./particle.js";
 import { Point } from "./point.js";
 import { Boundary } from "./boundary.js";
 import { calculateOpacity, invert } from "./util.js";
-import { BACKWARD, FORWARD, NUM_WALLS, ROTATE_DEG } from "./const.js";
+import {
+  BACKWARD,
+  FORWARD,
+  NUM_WALLS,
+  ROTATE_DEG,
+  WALL_HEIGHT,
+} from "./const.js";
 
 // 2d-canvas
 const canvas = document.getElementById("canvas-2d");
@@ -80,7 +86,7 @@ function anim() {
   for (let i = 0; i < distances.length; i++) {
     const dis = distances[i];
 
-    const height = 20000 * invert(dis);
+    const height = WALL_HEIGHT * canvas.clientHeight * invert(dis);
     const opacity = calculateOpacity(dis);
 
     ctx3d.fillStyle = `rgb(255 255 255 / ${1 - opacity})`;

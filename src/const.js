@@ -3,6 +3,7 @@ export const YELLOW = "#fce158";
 export const LIGHT_BLUE = "#e1f1fc";
 
 export const NUM_WALLS = 5;
+export const WALL_HEIGHT = 25;
 
 export const ALPHA = 0.5; // ray angle, deg
 export const FOV = 60; // field of view, deg
