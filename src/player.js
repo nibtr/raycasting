@@ -20,7 +20,7 @@ export class Player {
     this.ctx = ctx;
     this.x = x;
     this.y = y;
-    this.heading = FOV / 2;
+    this.heading = FOV / 2 - 180;
 
     this.rays = [];
     for (let a = 0; a <= FOV; a += 1) {
@@ -32,8 +32,8 @@ export class Player {
       const keyEvents = {
         a: () => this.rotate(-ROTATE_DEG),
         d: () => this.rotate(ROTATE_DEG),
-        w: () => this.move(BACKWARD),
-        s: () => this.move(FORWARD),
+        w: () => this.move(FORWARD),
+        s: () => this.move(BACKWARD),
       };
       keyEvents[e.key] && keyEvents[e.key]();
     });
@@ -189,20 +189,17 @@ export class Player {
       }
 
       let hit = false;
-      let side;
-      let distance;
+      let dis;
       while (!hit) {
         //jump to next map square, either in x-direction, or in y-direction
         if (sideDistX < sideDistY) {
           mapX += stepX;
-          distance = sideDistX; // original is incorrect so I add this
+          dis = sideDistX; // author's algo is somehow different so I added this
           sideDistX += deltaDistX * UNIT;
-          side = 0;
         } else {
           mapY += stepY;
-          distance = sideDistY;
+          dis = sideDistY;
           sideDistY += deltaDistY * UNIT;
-          side = 1;
         }
         //Check if ray has hit a wall
         if (world.walls[mapY][mapX].val > 0) {
@@ -211,10 +208,14 @@ export class Player {
       }
 
       // find collision point
-      const hitX = this.x + distance * ray.dir.x;
-      const hitY = this.y + distance * ray.dir.y;
+      const hitX = this.x + dis * ray.dir.x;
+      const hitY = this.y + dis * ray.dir.y;
       drawLine(this.ctx, this.x, this.y, hitX, hitY, YELLOW);
-      points.push({ x: hitX, y: hitY });
+
+      const adjustedDis =
+        distance(this.x, this.y, hitX, hitY) *
+        Math.cos(degToRad(ray.angle - this.heading));
+      points.push(adjustedDis);
     }
 
     return points;
