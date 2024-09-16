@@ -88,16 +88,17 @@ export class Player {
   move(dir) {
     const dx = Math.cos(degToRad(this.heading));
     const dy = Math.sin(degToRad(this.heading));
-    const mapX = Math.floor(Math.abs(this.x - 2 * dx) / UNIT);
-    const mapY = Math.floor(Math.abs(this.y - 2 * dy) / UNIT);
+
+    const step = dir === FORWARD ? -MOVE_STEP : MOVE_STEP;
+    const newX = this.x + dx * step;
+    const newY = this.y + dy * step;
+
+    const mapX = Math.floor(newX / UNIT);
+    const mapY = Math.floor(newY / UNIT);
 
     // check wall collision
     if (this.world.walls[mapY][mapX].val === 0) {
-      const step = dir === FORWARD ? MOVE_STEP : -MOVE_STEP;
-      this.updatePos(
-        Math.abs(this.x - dx * step),
-        Math.abs(this.y - dy * step)
-      );
+      this.updatePos(Math.abs(newX), Math.abs(newY));
     }
   }
 

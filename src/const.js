@@ -29,7 +29,7 @@ export const LIGHT_BLUE = "#d7e5fa";
 
 export const WALL_HEIGHT = 25;
 
-export const ALPHA = 0.25; // ray angle
+export const ALPHA = 0.5; // ray angle
 export const FOV = 66; // field of view
 
 export const MOVE_STEP = 1.5;
