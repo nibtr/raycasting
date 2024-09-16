@@ -2,11 +2,11 @@
 
 A simple raycasting rendering in Wolfenstein-style using vanilla JS canvas APIs. The project is a proof of concept for future similar ideas (e.g. games, although unsure).
 
-![rzA6nnhY](https://github.com/user-attachments/assets/48987de4-ad8f-4ba4-94b0-344b0a87fd4f)
+![Screen Recording 2024-09-16 at 8 56 43 PM](https://github.com/user-attachments/assets/c2234a4f-1a20-4155-8a91-b2ed03c04da9)
 
 ## Note
 
-- Since it is simply rendered on HTML canvas, poor performance on old machines and browsers are expected.
+- Since it is simply rendered on HTML canvas, poor performance on old machines and browsers are expected. (I'll adjust this in the future)
 - This might still be buggy and not used for anything serious, only for educational purposes.
 - Some logic might not be best practice.
 
@@ -16,10 +16,8 @@ W: forward; S: backward; A,D: rotate
 
 ## Implementation
 
-I implemented one version with line-line intersection algorithm for line-based world and one with DDA (Digital Differential Analyzer) algorithm for tile-based world. These algorithms are used to detect collision points between the rays and the walls.
-
-For the dda, please check the [v2 branch](https://github.com/nibtr/raycasting/tree/v2).
+The casting is implemented using DDA (Digital Differential Analyzer) algorithm to detect collision points between the rays and the walls. The algorithm works well in a tile-based world.
 
 ## References
 
-The dda algorithm renderer is heavily inspired by [https://lodev.org/cgtutor/raycasting.html](https://lodev.org/cgtutor/raycasting.html) with some minor adjustments for simplicity.
+The renderer is heavily inspired by [https://lodev.org/cgtutor/raycasting.html](https://lodev.org/cgtutor/raycasting.html) with some minor adjustments.
