@@ -13,17 +13,6 @@ export class World {
   constructor(ctx) {
     this.walls = [];
     this.ctx = ctx;
-    // for (let i = 0; i < MAP.length; i++) {
-    //   const y = i * size;
-    //   this.walls[i] = [];
-    //   this.mapWalls[y] = {};
-    //   for (let j = 0; j < MAP[i].length; j++) {
-    //     const x = j * size;
-    //     const s = this.ctx.canvas.width / GRID_SIZE;
-    //     this.walls[i][j] = new Box(this.ctx, j * s, i * s, MAP[i][j]);
-    //     this.mapWalls[y][x] = new Box(this.ctx, j * s, i * s, MAP[i][j]);
-    //   }
-    // }
 
     for (let i = 0; i < MAP.length; i++) {
       this.walls[i] = [];

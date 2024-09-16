@@ -1,7 +1,6 @@
 import { World } from "./world.js";
 import { Player } from "./player.js";
 import { HEIGHT, UNIT, WIDTH } from "./const.js";
-import { render3d } from "./util.js";
 
 // init canvas
 const canvas = document.getElementById("canvas");
@@ -18,7 +17,7 @@ ctx3d.canvas.height = HEIGHT;
 const world = new World(ctx);
 
 // create new player
-const player = new Player(ctx, 3 * UNIT, 3.5 * UNIT);
+const player = new Player(ctx, ctx3d, world, 3 * UNIT, 3.5 * UNIT);
 
 function anim() {
   requestAnimationFrame(anim);
@@ -27,9 +26,7 @@ function anim() {
 
   world.draw();
   player.draw();
-
-  const distances = player.look(world);
-  render3d(ctx3d, distances);
+  player.look();
 }
 
 anim();

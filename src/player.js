@@ -6,15 +6,24 @@ import {
   MOVE_STEP,
   ROTATE_DEG,
   UNIT,
+  WALL_HEIGHT,
   YELLOW,
 } from "./const.js";
 import { World } from "./world.js";
 import { Ray } from "./ray.js";
-import { degToRad, distance, drawLine } from "./util.js";
+import {
+  calculateOpacity,
+  degToRad,
+  distance,
+  drawLine,
+  invert,
+} from "./util.js";
 
 export class Player {
-  constructor(ctx, x, y) {
+  constructor(ctx, ctx3d, world, x, y) {
     this.ctx = ctx;
+    this.ctx3d = ctx3d; // a separate canvas context to render pseudo-3d
+    this.world = world;
     this.x = x;
     this.y = y;
     this.heading = FOV / 2 - 180;
@@ -77,25 +86,30 @@ export class Player {
    * Move the player based on the heading angle (in degree)
    */
   move(dir) {
-    const dx =
-      Math.cos(degToRad(this.heading)) *
-      (dir === FORWARD ? MOVE_STEP : -MOVE_STEP);
-    const dy =
-      Math.sin(degToRad(this.heading)) *
-      (dir === FORWARD ? MOVE_STEP : -MOVE_STEP);
-    this.updatePos(Math.abs(this.x - dx), Math.abs(this.y - dy));
+    const dx = Math.cos(degToRad(this.heading));
+    const dy = Math.sin(degToRad(this.heading));
+    const mapX = Math.floor(Math.abs(this.x - 2 * dx) / UNIT);
+    const mapY = Math.floor(Math.abs(this.y - 2 * dy) / UNIT);
+
+    // check wall collision
+    if (this.world.walls[mapY][mapX].val === 0) {
+      const step = dir === FORWARD ? MOVE_STEP : -MOVE_STEP;
+      this.updatePos(
+        Math.abs(this.x - dx * step),
+        Math.abs(this.y - dy * step)
+      );
+    }
   }
 
   /**
-   *  Cast rays from the player out to the world, returns a list of distances of the closest intersection points
-   *  (the distances are adjusted to the length from the projection ray onto the player plane).
+   *  Cast rays from the player out to the world and render the pseudo-3d of the player's view
    * @param {World} world
    */
-  look(world) {
+  look() {
     // DDA algorithm
     // ref: https://lodev.org/cgtutor/raycasting.html
-    const points = [];
-    for (const ray of this.rays) {
+    for (const index in this.rays) {
+      const ray = this.rays[index];
       // coord of the box we're in
       let mapX = Math.floor(this.x / UNIT);
       let mapY = Math.floor(this.y / UNIT);
@@ -130,28 +144,24 @@ export class Player {
       }
 
       let hit = false;
-      const maxDis = 700;
       let dis = 0;
-      while (!hit && dis < maxDis) {
+      let side;
+      while (!hit) {
         // jump to next map square, either in x-direction, or in y-direction
         if (sideDistX < sideDistY) {
           mapX += stepX;
           dis = sideDistX; // author's algo is somehow different so I added this
           sideDistX += deltaDistX * UNIT;
+          side = 0;
         } else {
           mapY += stepY;
           dis = sideDistY;
           sideDistY += deltaDistY * UNIT;
+          side = 1;
         }
         // check if ray has hit a wall
-        if (
-          mapX >= 0 &&
-          mapX < world.walls.length &&
-          mapY >= 0 &&
-          mapY < world.walls.length &&
-          world.walls[mapY][mapX].val > 0
-        ) {
-          hit = 1;
+        if (this.world.walls[mapY][mapX].val > 0) {
+          hit = true;
         }
       }
 
@@ -160,13 +170,41 @@ export class Player {
       const hitY = this.y + dis * ray.dir.y;
       drawLine(this.ctx, this.x, this.y, hitX, hitY);
 
+      // fix fisheye problem
+      // ref: https://gamedev.stackexchange.com/questions/97574/how-can-i-fix-the-fisheye-distortion-in-my-raycast-renderer
       const adjustedDis = Math.abs(
         distance(this.x, this.y, hitX, hitY) *
           Math.cos(degToRad(ray.angle - this.heading))
       );
-      points.push(adjustedDis);
-    }
 
-    return points;
+      this.renderView(adjustedDis, index, side);
+    }
+  }
+
+  /**
+   *  Render the column of the given collision point at `index` based on the distance from the player to the point
+   *  Adjust lighting accordingly based on the side of the collision point
+   * @param {number} dis
+   * @param {number} index
+   * @param {number} side
+   */
+  renderView(dis, index, side) {
+    this.ctx3d.beginPath();
+
+    const screenW = this.ctx3d.canvas.width;
+    const screenH = this.ctx3d.canvas.height;
+
+    const height = Math.min(WALL_HEIGHT * screenW * invert(dis), screenH); // column height
+    const columnW = screenW / this.rays.length;
+    const y = Math.max(screenH / 2 - height / 2, 0);
+    let opacity = 1 - calculateOpacity(dis);
+
+    if (side === 1) opacity /= 1.5;
+    const color = `rgb(255 255 255 / ${opacity})`;
+
+    this.ctx3d.fillStyle = color;
+    // this.ctx3d.strokeStyle = "transparent";
+    this.ctx3d.fillRect(index * columnW, y, columnW, height);
+    this.ctx3d.closePath();
   }
 }
