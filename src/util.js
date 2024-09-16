@@ -1,18 +1,20 @@
 import { LIGHT_BLUE } from "./const.js";
-import { Point } from "./point.js";
 
 /**
  *  Draw a line between 2 points
+ *
  * @param {CanvasRenderingContext2D} ctx
- * @param {string} color
- * @param {Point} pt1
- * @param {Point} pt2
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @param {string | null} color
  */
-export function drawLine(ctx, pt1, pt2, color = LIGHT_BLUE) {
+export function drawLine(ctx, x1, y1, x2, y2, color = LIGHT_BLUE) {
   ctx.beginPath();
-  ctx.moveTo(pt1.x, pt1.y);
-  ctx.lineTo(pt2.x, pt2.y);
-  ctx.lineWidth = 0.5;
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.lineWidth = 2;
   ctx.lineJoin = "round";
   ctx.strokeStyle = color;
   ctx.stroke();
@@ -30,12 +32,14 @@ export function degToRad(deg) {
 
 /**
  * Calculate the Euclidean distance between 2 points
- * @param {Point} pt1
- * @param {Point} pt2
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
  * @returns {number}
  */
-export function distance(pt1, pt2) {
-  return Math.sqrt(Math.pow(pt1.x - pt2.x, 2) + Math.pow(pt1.y - pt2.y, 2));
+export function distance(x1, y1, x2, y2) {
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
 
 /**

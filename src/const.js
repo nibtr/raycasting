@@ -1,14 +1,38 @@
+export const WIDTH = 480; // canvas width
+export const HEIGHT = 480; // canvas height
+
+export const MAP = [
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+  [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+];
+
+export const UNIT = WIDTH / MAP.length; // 1 tile unit scaled to canvas size
+
+export const BLACK = "#000000";
 export const WHITE = "#f5f6f7";
 export const YELLOW = "#fce158";
-export const LIGHT_BLUE = "#e1f1fc";
+export const LIGHT_BLUE = "#d7e5fa";
 
-export const NUM_WALLS = 5;
 export const WALL_HEIGHT = 25;
 
-export const ALPHA = 0.5; // ray angle, deg
-export const FOV = 60; // field of view, deg
+export const ALPHA = 0.25; // ray angle
+export const FOV = 66; // field of view
 
-export const MOVE_STEP = 1.25;
-export const ROTATE_DEG = 1.5; // deg
+export const MOVE_STEP = 1.5;
+export const ROTATE_DEG = 2; // deg
 export const FORWARD = "FORWARD";
 export const BACKWARD = "BACKWARD";

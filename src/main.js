@@ -1,104 +1,32 @@
-import { Particle } from "./particle.js";
-import { Point } from "./point.js";
-import { Boundary } from "./boundary.js";
-import { calculateOpacity, invert } from "./util.js";
-import {
-  BACKWARD,
-  FORWARD,
-  NUM_WALLS,
-  ROTATE_DEG,
-  WALL_HEIGHT,
-} from "./const.js";
+import { World } from "./world.js";
+import { Player } from "./player.js";
+import { HEIGHT, UNIT, WIDTH } from "./const.js";
 
-// 2d-canvas
-const canvas = document.getElementById("canvas-2d");
+// init canvas
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-ctx.canvas.width = window.innerWidth / 2.5;
-ctx.canvas.height = window.innerHeight / 2;
+ctx.canvas.width = WIDTH;
+ctx.canvas.height = HEIGHT;
 
-// 3d-canvas
 const canvas3d = document.getElementById("canvas-3d");
 const ctx3d = canvas3d.getContext("2d");
-ctx3d.canvas.width = window.innerWidth / 2.5;
-ctx3d.canvas.height = window.innerHeight / 2;
+ctx3d.canvas.width = WIDTH * 1.5;
+ctx3d.canvas.height = HEIGHT;
 
-// create new particle
-const particle = new Particle(
-  ctx,
-  new Point(canvas.clientWidth / 2, canvas.clientHeight / 2)
-);
+// create new world
+const world = new World(ctx);
 
-const walls = [];
-
-// canvas boundary
-const pt1 = new Point(0, 0);
-const pt2 = new Point(canvas.clientWidth, 0);
-const pt3 = new Point(canvas.clientWidth, canvas.clientHeight);
-const pt4 = new Point(0, canvas.clientHeight);
-walls.push(new Boundary(ctx, pt1, pt2));
-walls.push(new Boundary(ctx, pt2, pt3));
-walls.push(new Boundary(ctx, pt3, pt4));
-walls.push(new Boundary(ctx, pt4, pt1));
-
-for (let i = 0; i < NUM_WALLS; i++) {
-  walls.push(
-    new Boundary(
-      ctx,
-      new Point(
-        Math.random() * canvas.clientWidth,
-        Math.random() * canvas.clientHeight
-      ),
-      new Point(
-        Math.random() * canvas.clientWidth,
-        Math.random() * canvas.clientHeight
-      )
-    )
-  );
-}
-
-window.addEventListener("keydown", (e) => {
-  const keyEvents = {
-    a: () => particle.rotate(-ROTATE_DEG),
-    d: () => particle.rotate(ROTATE_DEG),
-    w: () => particle.move(FORWARD),
-    s: () => particle.move(BACKWARD),
-  };
-  keyEvents[e.key] && keyEvents[e.key]();
-});
+// create new player
+const player = new Player(ctx, ctx3d, world, 3 * UNIT, 3.5 * UNIT);
 
 function anim() {
   requestAnimationFrame(anim);
-
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   ctx3d.clearRect(0, 0, canvas3d.clientWidth, canvas3d.clientHeight);
 
-  particle.draw();
-  for (const wall of walls) {
-    wall.draw();
-  }
-
-  const distances = particle.cast(walls); // get the list of distances after casting
-
-  ctx3d.beginPath();
-
-  // calculate the width of a column of an intersection point
-  const columnW = canvas.clientWidth / distances.length;
-  for (let i = 0; i < distances.length; i++) {
-    const dis = distances[i];
-
-    const height = WALL_HEIGHT * canvas.clientHeight * invert(dis);
-    const opacity = calculateOpacity(dis);
-
-    ctx3d.fillStyle = `rgb(255 255 255 / ${1 - opacity})`;
-    ctx3d.strokeStyle = "transparent";
-    ctx3d.fillRect(
-      i * columnW,
-      canvas.clientHeight / 2 - height / 2,
-      columnW,
-      height
-    );
-  }
-  ctx3d.closePath();
+  world.draw();
+  player.draw();
+  player.look();
 }
 
 anim();
