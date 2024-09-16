@@ -2,7 +2,7 @@
 
 A simple raycasting rendering in Wolfenstein-style using vanilla JS canvas APIs. The project is a proof of concept for future similar ideas (e.g. games, although unsure).
 
-![Screen Recording 2024-09-16 at 8 56 43 PM](https://github.com/user-attachments/assets/c2234a4f-1a20-4155-8a91-b2ed03c04da9)
+![s8Wmt-HB](https://github.com/user-attachments/assets/79473e8c-6fef-4a8a-9ba0-856f096cb601)
 
 ## Note
 
