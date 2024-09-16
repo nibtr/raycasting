@@ -195,17 +195,16 @@ export class Player {
     const screenW = this.ctx3d.canvas.width;
     const screenH = this.ctx3d.canvas.height;
 
-    const height = Math.min(WALL_HEIGHT * screenW * invert(dis), screenH); // column height
+    const columnH = Math.min(WALL_HEIGHT * screenW * invert(dis), screenH);
     const columnW = screenW / this.rays.length;
-    const y = Math.max(screenH / 2 - height / 2, 0);
+    const y = Math.max(screenH / 2 - columnH / 2, 0);
     let opacity = 1 - calculateOpacity(dis);
 
     if (side === 1) opacity /= 1.5;
     const color = `rgb(255 255 255 / ${opacity})`;
 
     this.ctx3d.fillStyle = color;
-    // this.ctx3d.strokeStyle = "transparent";
-    this.ctx3d.fillRect(index * columnW, y, columnW, height);
+    this.ctx3d.fillRect(index * columnW, y, columnW, columnH);
     this.ctx3d.closePath();
   }
 }
