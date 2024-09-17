@@ -9,6 +9,16 @@ A simple raycasting rendering in Wolfenstein-style using vanilla JS canvas APIs.
 >- This might still be buggy and not used for anything serious, only for educational purposes.
 >- Some logic might not be best practice.
 
+## Local development
+
+Ensure `npm` or `python3` is installed and run the following to open a local HTTP server
+
+```bash
+npx http-server /path/to/project -o -p 6969
+# or
+python3 -m http.server
+```
+
 ## Control
 
 W: forward; S: backward; A,D: rotate

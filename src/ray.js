@@ -1,4 +1,3 @@
-import { WHITE } from "./const.js";
 import { degToRad } from "./util.js";
 
 export class Ray {
