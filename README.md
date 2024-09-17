@@ -4,11 +4,10 @@ A simple raycasting rendering in Wolfenstein-style using vanilla JS canvas APIs.
 
 ![s8Wmt-HB](https://github.com/user-attachments/assets/79473e8c-6fef-4a8a-9ba0-856f096cb601)
 
-## Note
-
-- Since it is simply rendered on HTML canvas, poor performance on old machines and browsers are expected. (I'll adjust this in the future)
-- This might still be buggy and not used for anything serious, only for educational purposes.
-- Some logic might not be best practice.
+>[!WARNING]
+>- Since it is simply rendered on HTML canvas, poor performance on old machines and browsers are expected. (I'll adjust this in the future)
+>- This might still be buggy and not used for anything serious, only for educational purposes.
+>- Some logic might not be best practice.
 
 ## Control
 
