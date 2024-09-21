@@ -207,8 +207,8 @@ export class Player {
     this.ctx3d.fillRect(index * columnW, y, columnW, columnH);
 
     // render floor
-    this.ctx3d.fillStyle = `rgb(169 169 169 / 0.2)`
-    this.ctx3d.fillRect(index * columnW, y + columnH, columnW, Math.max((screenH - columnH) / 2, 0));
+    // this.ctx3d.fillStyle = `rgb(169 169 169 / 0.2)`
+    // this.ctx3d.fillRect(index * columnW, y + columnH, columnW, Math.max((screenH - columnH) / 2, 0));
 
     this.ctx3d.closePath();
   }
