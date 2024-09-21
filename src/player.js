@@ -175,7 +175,7 @@ export class Player {
       // ref: https://gamedev.stackexchange.com/questions/97574/how-can-i-fix-the-fisheye-distortion-in-my-raycast-renderer
       const adjustedDis = Math.abs(
         distance(this.x, this.y, hitX, hitY) *
-          Math.cos(degToRad(ray.angle - this.heading))
+        Math.cos(degToRad(ray.angle - this.heading))
       );
 
       this.renderView(adjustedDis, index, side);
@@ -205,6 +205,11 @@ export class Player {
 
     this.ctx3d.fillStyle = color;
     this.ctx3d.fillRect(index * columnW, y, columnW, columnH);
+
+    // render floor
+    this.ctx3d.fillStyle = `rgb(169 169 169 / 0.2)`
+    this.ctx3d.fillRect(index * columnW, y + columnH, columnW, Math.max((screenH - columnH) / 2, 0));
+
     this.ctx3d.closePath();
   }
 }
