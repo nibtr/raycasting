@@ -2,21 +2,19 @@ import { World } from "./world.js";
 import { Player } from "./player.js";
 import { HEIGHT, UNIT, WIDTH } from "./const.js";
 
-// init canvas
+// init 2d canvas for top-down view
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 ctx.canvas.width = WIDTH;
 ctx.canvas.height = HEIGHT;
 
+// pseudo-3d canvas to render the world
 const canvas3d = document.getElementById("canvas-3d");
 const ctx3d = canvas3d.getContext("2d");
 ctx3d.canvas.width = WIDTH * 1.5;
 ctx3d.canvas.height = HEIGHT;
 
-// create new world
 const world = new World(ctx);
-
-// create new player
 const player = new Player(ctx, ctx3d, world, 3 * UNIT, 3.5 * UNIT);
 
 function anim() {

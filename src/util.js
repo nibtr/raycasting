@@ -54,8 +54,8 @@ export function invert(val) {
 
 /**
  *  Calculate the opacity of a column based on the given distance
- * @param {number} dis
- * @returns {number}
+ * @param {number} dis distance
+ * @returns {number} opacity, range from 0 to 1
  */
 export function calculateOpacity(dis) {
   const minDis = 0;

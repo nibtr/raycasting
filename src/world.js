@@ -1,15 +1,24 @@
 import { BLACK, MAP, UNIT, WHITE } from "./const.js";
 
 export class Box {
+  /**
+   * @param {CanvasRenderingContext2D} ctx canvas context
+   * @param {number} x x position
+   * @param {number} y y position
+   * @param {number} val value for the box: 1=wall, 0=empty
+   */
   constructor(ctx, x, y, val) {
     this.ctx = ctx;
     this.x = x;
     this.y = y;
-    this.val = val; // 1=wall, 0=empty
+    this.val = val;
   }
 }
 
 export class World {
+  /**
+   * @param {CanvasRenderingContext2D} ctx
+   */
   constructor(ctx) {
     this.walls = [];
     this.ctx = ctx;
@@ -22,6 +31,9 @@ export class World {
     }
   }
 
+  /**
+   * Draw the world
+   */
   draw() {
     this.ctx.beginPath();
     for (let i = 0; i < this.walls.length; i++) {

@@ -1,6 +1,9 @@
 export const WIDTH = 480; // canvas width
 export const HEIGHT = 480; // canvas height
 
+/**
+ *  2D map, 1 for wall, 0 for floor
+ */
 export const MAP = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
@@ -20,7 +23,10 @@ export const MAP = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
-export const UNIT = WIDTH / MAP.length; // 1 tile unit scaled to canvas size
+/**
+ * 1 tile unit scaled to canvas size
+ */
+export const UNIT = WIDTH / MAP.length;
 
 export const BLACK = "#000000";
 export const WHITE = "#f5f6f7";

@@ -20,9 +20,16 @@ import {
 } from "./util.js";
 
 export class Player {
+  /**
+   * @param {CanvasRenderingContext2D} ctx 2d canvas, to render top-down view
+   * @param {CanvasRenderingContext2D} ctx3 pseudo-3d canvas to render pseudo-3d view
+   * @param {World} world instance of world object
+   * @param {number} x initial x position
+   * @param {number} y initial y position
+   */
   constructor(ctx, ctx3d, world, x, y) {
     this.ctx = ctx;
-    this.ctx3d = ctx3d; // a separate canvas context to render pseudo-3d
+    this.ctx3d = ctx3d;
     this.world = world;
     this.x = x;
     this.y = y;
@@ -58,8 +65,8 @@ export class Player {
 
   /**
    * Update the position of the player
-   * @param {number} x
-   * @param {number} y
+   * @param {number} x x position
+   * @param {number} y y position
    */
   updatePos(x, y) {
     this.x = x;
@@ -70,8 +77,8 @@ export class Player {
   }
 
   /**
-   *  Rotate the player by the given angle (in deg)
-   * @param {number} angle
+   *  Rotate the player by the given angle
+   * @param {number} angle angle to rotate (in deg)
    */
   rotate(angle) {
     this.heading += angle;
@@ -84,6 +91,7 @@ export class Player {
 
   /**
    * Move the player based on the heading angle (in degree)
+   * @param {"FORWARD" | "BACKWARD"} dir the direction to move
    */
   move(dir) {
     const dx = Math.cos(degToRad(this.heading));
@@ -104,7 +112,7 @@ export class Player {
 
   /**
    *  Cast rays from the player out to the world and render the pseudo-3d of the player's view
-   * @param {World} world
+   * @param {World} world instance of world
    */
   look() {
     // DDA algorithm
@@ -175,7 +183,7 @@ export class Player {
       // ref: https://gamedev.stackexchange.com/questions/97574/how-can-i-fix-the-fisheye-distortion-in-my-raycast-renderer
       const adjustedDis = Math.abs(
         distance(this.x, this.y, hitX, hitY) *
-        Math.cos(degToRad(ray.angle - this.heading))
+          Math.cos(degToRad(ray.angle - this.heading))
       );
 
       this.renderView(adjustedDis, index, side);
@@ -185,9 +193,9 @@ export class Player {
   /**
    *  Render the column of the given collision point at `index` based on the distance from the player to the point
    *  Adjust lighting accordingly based on the side of the collision point
-   * @param {number} dis
-   * @param {number} index
-   * @param {number} side
+   * @param {number} dis distance from player to the point
+   * @param {number} index index of the column
+   * @param {number} side side of the collision point
    */
   renderView(dis, index, side) {
     this.ctx3d.beginPath();
