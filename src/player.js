@@ -123,7 +123,7 @@ export class Player {
       let mapX = Math.floor(this.x / UNIT);
       let mapY = Math.floor(this.y / UNIT);
 
-      // length of ray from one x or y-side to next x or y-side
+      // precalculate length ratio of ray from one x-side or y-side to next x-side or y-side
       let deltaDistX = ray.dir.x === 0 ? Infinity : Math.abs(1 / ray.dir.x);
       let deltaDistY = ray.dir.y === 0 ? Infinity : Math.abs(1 / ray.dir.y);
 
@@ -144,6 +144,7 @@ export class Player {
         stepX = 1;
         sideDistX = ((mapX + 1) * UNIT - this.x) * deltaDistX;
       }
+
       if (ray.dir.y < 0) {
         stepY = -1;
         sideDistY = (this.y - mapY * UNIT) * deltaDistY;
@@ -159,12 +160,12 @@ export class Player {
         // jump to next map square, either in x-direction, or in y-direction
         if (sideDistX < sideDistY) {
           mapX += stepX;
-          dis = sideDistX; // author's algo is somehow different so I added this
+          dis = sideDistX; // save the actual distance from start to the current x-side
           sideDistX += deltaDistX * UNIT;
           side = 0;
         } else {
           mapY += stepY;
-          dis = sideDistY;
+          dis = sideDistY; // save the actual distance from start to the current y-side
           sideDistY += deltaDistY * UNIT;
           side = 1;
         }
